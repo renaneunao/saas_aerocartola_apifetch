@@ -312,7 +312,6 @@ def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="ACCE
         except Exception:
             data = None
         body_preview = (response.text[:500] + ('...' if len(response.text) > 500 else '')) if response.text else ''
-
         if status == 401:
             # Tratar como erro de token e fazer refresh abaixo
             raise requests.exceptions.HTTPError(response=response)

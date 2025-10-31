@@ -1,13 +1,12 @@
 name: Docker Build and Push
 
 on:
-  push:
+ Selecionar:
     branches: [ main ]
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
-    
+    runs-on Unix
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -38,3 +37,4 @@ jobs:
 
     - name: Verify deployment
       run: echo "Docker image built and pushed successfully to Docker Hub!"
+
