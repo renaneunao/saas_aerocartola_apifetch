@@ -1,13 +1,3 @@
-def create_status_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS status (
-            id INTEGER PRIMARY KEY,
-            nome TEXT
-        )
-    ''')
-    conn.commit()
-
 def update_status(conn, status_data):
     cursor = conn.cursor()
     for status_id, status in status_data.items():

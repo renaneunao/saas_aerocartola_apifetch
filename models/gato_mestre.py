@@ -1,17 +1,5 @@
 from utils.utilidades import printdbg
 
-def create_gato_mestre_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS gato_mestre (
-            atleta_id INTEGER PRIMARY KEY,
-            minimo_para_valorizar REAL,
-            minutos_jogados INTEGER,
-            FOREIGN KEY (atleta_id) REFERENCES atletas(atleta_id)
-        )
-    ''')
-    conn.commit()
-
 def update_gato_mestre(conn, gato_mestre_data):
     cursor = conn.cursor()
 

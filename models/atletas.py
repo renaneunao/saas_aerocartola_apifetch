@@ -1,29 +1,3 @@
-def create_atletas_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS atletas (
-            atleta_id INTEGER PRIMARY KEY,
-            rodada_id INTEGER,  -- Apenas para referência, não parte da chave
-            clube_id INTEGER,
-            posicao_id INTEGER,
-            status_id INTEGER,
-            pontos_num REAL,
-            media_num REAL,
-            variacao_num REAL,
-            preco_num REAL,
-            jogos_num INTEGER,
-            entrou_em_campo BOOLEAN,
-            slug TEXT,
-            apelido TEXT,
-            nome TEXT,
-            foto TEXT,
-            FOREIGN KEY (clube_id) REFERENCES clubes(id),
-            FOREIGN KEY (posicao_id) REFERENCES posicoes(id),
-            FOREIGN KEY (status_id) REFERENCES status(id)
-        )
-    ''')
-    conn.commit()
-
 def update_atletas(conn, atletas_data, rodada_atual):
     import time
     from psycopg2.extras import execute_values
