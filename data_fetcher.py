@@ -219,20 +219,7 @@ class DataFetcherService:
                 cursor.close()
                 return count > 0
             
-            # Para destaques, verificar last_update na tracking (assume 1x por rodada)
-            if table_name == 'destaques':
-                cursor.execute("""
-                    SELECT last_update 
-                    FROM updates_tracking 
-                    WHERE table_name = %s
-                """, (table_name,))
-                result = cursor.fetchone()
-                cursor.close()
-                # Se foi atualizado nas últimas 24h, assume que já foi nesta rodada
-                if result and result[0]:
-                    from datetime import timedelta
-                    if result[0] > datetime.now() - timedelta(hours=24):
-                        return True
+            # Destaques não são mais verificados aqui - são atualizados a cada 5 minutos
             
             cursor.close()
             return False
@@ -531,17 +518,12 @@ class DataFetcherService:
     
     @retry_on_failure(max_retries=2, delay=3.0)
     @rate_limiter
-    def fetch_and_store_destaques(self, rodada: int) -> bool:
+    def fetch_and_store_destaques(self, rodada: int = None) -> bool:
         """
         Busca e armazena destaques do mercado
-        Lógica: Atualiza uma vez por rodada
+        Lógica: Atualiza a cada 5 minutos (sempre)
         """
         try:
-            # Verificar se já foi atualizado nesta rodada
-            if self.was_updated_in_round('destaques', rodada):
-                logger.info(f"Destaques da rodada {rodada} já foram atualizados, pulando...")
-                return True
-            
             logger.info("Buscando destaques do mercado...")
             destaques_data = fetch_destaques_data()
             
@@ -623,7 +605,7 @@ class DataFetcherService:
                     logger.info("Rodada atual é 1, não há rodadas anteriores para buscar partidas")
                     results['partidas'] = True
                 
-                # Destaques da rodada atual (uma vez por rodada)
+                # Destaques (atualizados a cada 5 minutos)
                 self.fetch_and_store_destaques(rodada_atual)
                 
                 # PONTUADOS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1)
