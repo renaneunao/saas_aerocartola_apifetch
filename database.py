@@ -13,20 +13,23 @@ POSTGRES_CONFIG = {
     'port': int(os.getenv('POSTGRES_PORT', 5432)) if os.getenv('POSTGRES_PORT') else 5432,
     'user': os.getenv('POSTGRES_USER'),
     'password': os.getenv('POSTGRES_PASSWORD'),
-    'database': os.getenv('POSTGRES_DB')
+    'database': os.getenv('POSTGRES_DB', 'cartola_manager')  # Usa cartola_manager como padrão
 }
 
 # Validar se todas as variáveis obrigatórias foram fornecidas
+# POSTGRES_DB não é obrigatório, será sempre cartola_manager
 required_vars_map = {
     'POSTGRES_HOST': 'host',
     'POSTGRES_USER': 'user', 
-    'POSTGRES_PASSWORD': 'password',
-    'POSTGRES_DB': 'database'
+    'POSTGRES_PASSWORD': 'password'
 }
 missing_vars = [env_var for env_var, config_key in required_vars_map.items() if not POSTGRES_CONFIG.get(config_key)]
 
 if missing_vars:
     raise ValueError(f"Variáveis de ambiente obrigatórias não encontradas no .env: {', '.join(missing_vars)}")
+
+# Garantir que o nome do banco seja sempre cartola_manager
+POSTGRES_CONFIG['database'] = 'cartola_manager'
 
 def get_db_connection():
     """Conecta ao banco de dados PostgreSQL"""
@@ -77,7 +80,7 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
         close_db_connection(conn)
 
 def create_database_if_not_exists():
-    """Cria o banco de dados se ele não existir"""
+    """Cria o banco de dados cartola_manager se ele não existir"""
     # Conectar ao banco padrão do PostgreSQL (postgres) para criar o banco
     config_without_db = {
         'host': POSTGRES_CONFIG['host'],
@@ -87,7 +90,7 @@ def create_database_if_not_exists():
         'database': 'postgres'  # Conectar ao banco padrão
     }
     
-    db_name = POSTGRES_CONFIG['database']
+    db_name = 'cartola_manager'  # Nome fixo do banco de dados
     
     try:
         # Conectar ao banco padrão
