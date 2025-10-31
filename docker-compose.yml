@@ -18,11 +18,10 @@ services:
       AERO_RBSV_ID_TOKEN: ${AERO_RBSV_ID_TOKEN}
     volumes:
       - ./logs:/app/logs
-      - ./data_fetcher.log:/app/data_fetcher.log
     networks:
-      - data-fetcher-network
+      - infra_network
 
 networks:
-  data-fetcher-network:
-    driver: bridge
+  infra_network:
+    external: true
 
