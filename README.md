@@ -20,11 +20,11 @@ Serviço responsável por coletar dados da API do Cartola FC periodicamente e ar
 
 ### Tipo 2: Atualização por Rodada (Uma vez por rodada)
 - `partidas` - Partidas do Campeonato Brasileiro (verifica todas as rodadas de 1 até rodada_atual - 1)
-- `destaques` - Jogadores em destaque no mercado
 - `pontuados` - Pontuações dos atletas por rodada (verifica todas as rodadas de 1 até rodada_atual - 1)
 
 ### Tipo 3: Atualização Contínua (A cada 5 minutos)
 - `atletas` - Dados de todos os atletas do mercado
+- `destaques` - Jogadores em destaque no mercado
 
 ## 🔧 Configuração
 
