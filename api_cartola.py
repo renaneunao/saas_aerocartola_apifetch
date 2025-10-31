@@ -18,11 +18,11 @@ API_URL_REFRESH = "https://api.cartola.globo.com/refresh"
 API_URL_TEAM_DATA = "https://api.cartola.globo.com/auth/time"
 API_URL_SALVAR_TIME = "https://api.cartola.globo.com/auth/time/salvar"
 
-def update_env_with_new_key(new_key, env_key="ACCESS_TOKEN_TIME1"):
+def update_env_with_new_key(new_key, env_key="AERO_RBSV"):
     """[DEPRECATED] Mantido por compatibilidade; não grava mais em .env."""
     return new_key
 
-def refresh_access_token(current_token, env_key="ACCESS_TOKEN_TIME1"):
+def refresh_access_token(current_token, env_key="AERO_RBSV"):
     """Atualiza os tokens de acesso via API usando o refresh token."""
     # Buscar credencial no banco
     conn = get_db_connection()
@@ -144,7 +144,7 @@ def fetch_esquemas_data():
         print(f"Erro ao consultar a API Cartola (esquemas): {e}")
         return None
 
-def fetch_destaques_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
+def fetch_destaques_data(access_token=None, env_key="AERO_RBSV"):
     """Obtém dados de destaques do mercado."""
     token = access_token
     if not token:
@@ -188,7 +188,7 @@ def fetch_destaques_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
             printdbg(f"Erro em destaques ({env_key}): {e}")
             return None
 
-def fetch_gato_mestre_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
+def fetch_gato_mestre_data(access_token=None, env_key="AERO_RBSV"):
     """Obtém dados do Gato Mestre."""
     token = access_token
     if not token:
@@ -232,7 +232,7 @@ def fetch_gato_mestre_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
             printdbg(f"Erro em gato_mestre ({env_key}): {e}")
             return None
 
-def fetch_team_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
+def fetch_team_data(access_token=None, env_key="AERO_RBSV"):
     """Obtém os dados do time do usuário, incluindo o patrimônio."""
     printdbg(f"Buscando dados do time ({env_key})")
     token = access_token
@@ -277,7 +277,7 @@ def fetch_team_data(access_token=None, env_key="ACCESS_TOKEN_TIME1"):
             printdbg(f"Erro em time ({env_key}): {e}")
             return None, None
 
-def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="ACCESS_TOKEN_TIME1"):
+def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="AERO_RBSV"):
     """Envia a escalação para a API do Cartola FC."""
     printdbg(f"Enviando escalação ({env_key})")
     token = access_token
