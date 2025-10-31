@@ -20,7 +20,7 @@ import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
-from database import get_db_connection, close_db_connection
+from database import get_db_connection, close_db_connection, initialize_database
 from utils.utilidades import printdbg
 from api_cartola import (
     fetch_cartola_data,
@@ -32,15 +32,15 @@ from api_cartola import (
 )
 # Removidos: CBF, Joga10 e Prováveis - não são responsabilidade deste container
 
-# Importar modelos para criar tabelas e atualizar dados
-from models.atletas import create_atletas_table, update_atletas
-from models.clubes import create_clubes_table, update_clubes
-from models.status import create_status_table, update_status
-from models.posicoes import create_posicoes_table, update_posicoes
-from models.partidas import create_partidas_table, update_partidas
-from models.pontuados import create_pontuados_table, update_pontuados
-from models.esquemas import create_esquemas_table, update_esquemas
-from models.destaques import create_destaques_table, update_destaques
+# Importar modelos para atualizar dados (tabelas são criadas via init.sql)
+from models.atletas import update_atletas
+from models.clubes import update_clubes
+from models.status import update_status
+from models.posicoes import update_posicoes
+from models.partidas import update_partidas
+from models.pontuados import update_pontuados
+from models.esquemas import update_esquemas
+from models.destaques import update_destaques
 # Removidos: provaveis_cartola - não é responsabilidade deste container
 
 # Configuração de logging
@@ -121,6 +121,12 @@ class DataFetcherService:
         self.running = False
         self.last_fetch_time = None
         self.last_fetch_status = None
+        # Inicializar banco de dados (criar tabelas se não existirem)
+        logger.info("Inicializando banco de dados...")
+        if initialize_database():
+            logger.info("Banco de dados inicializado com sucesso")
+        else:
+            logger.warning("Falha ao inicializar banco de dados. Verifique os logs.")
     
     # ========== FUNÇÕES AUXILIARES DE CONTROLE DE ATUALIZAÇÃO ==========
     
@@ -291,12 +297,6 @@ class DataFetcherService:
                 return False
             
             try:
-                # Criar tabelas se não existirem
-                create_clubes_table(conn)
-                create_posicoes_table(conn)
-                create_status_table(conn)
-                create_atletas_table(conn)
-                
                 # Obter rodada atual
                 rodada_atual = self.get_current_round()
                 if not rodada_atual:
@@ -426,7 +426,6 @@ class DataFetcherService:
                 return False
             
             try:
-                create_partidas_table(conn)
                 update_partidas(conn, partidas_data, rodada)
                 self.mark_table_updated('partidas')
                 logger.info(f"Partidas da rodada {rodada} armazenadas com sucesso")
@@ -459,7 +458,6 @@ class DataFetcherService:
                 return False
             
             try:
-                create_pontuados_table(conn)
                 update_pontuados(conn, pontuados_data, rodada)
                 self.mark_table_updated('pontuados')
                 logger.info(f"Atletas pontuados da rodada {rodada} armazenados com sucesso")
@@ -501,7 +499,6 @@ class DataFetcherService:
             try:
                 # Verificar se já tem dados antes de atualizar
                 if not self.table_has_data('esquemas'):
-                    create_esquemas_table(conn)
                     update_esquemas(conn, esquemas_data)
                     logger.info(f"Esquemas atualizados: {len(esquemas_data)}")
                 else:
@@ -537,7 +534,6 @@ class DataFetcherService:
                 return False
             
             try:
-                create_destaques_table(conn)
                 update_destaques(conn, destaques_data)
                 self.mark_table_updated('destaques')
                 logger.info(f"Destaques atualizados: {len(destaques_data)} itens")

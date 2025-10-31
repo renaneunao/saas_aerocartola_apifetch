@@ -1,18 +1,3 @@
-def create_clubes_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS clubes (
-            id INTEGER PRIMARY KEY,
-            nome TEXT,
-            abreviacao TEXT,
-            slug TEXT,
-            apelido TEXT,
-            nome_fantasia TEXT,
-            url_editoria TEXT
-        )
-    ''')
-    conn.commit()
-
 def update_clubes(conn, clubes_data):
     cursor = conn.cursor()
     for clube_id, clube in clubes_data.items():

@@ -1,35 +1,3 @@
-def create_pontuados_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS pontuados (
-            atleta_id INTEGER,
-            rodada_id INTEGER,
-            clube_id INTEGER,
-            posicao_id INTEGER,
-            pontuacao REAL,
-            entrou_em_campo BOOLEAN,
-            apelido TEXT,
-            foto TEXT,
-            scout_a INTEGER DEFAULT 0,  -- Assistência
-            scout_ca INTEGER DEFAULT 0, -- Cartão Amarelo
-            scout_cv INTEGER DEFAULT 0, -- Cartão Vermelho
-            scout_de INTEGER DEFAULT 0, -- Defesa
-            scout_ds INTEGER DEFAULT 0, -- Desarme
-            scout_fc INTEGER DEFAULT 0, -- Falta Cometida
-            scout_fd INTEGER DEFAULT 0, -- Finalização Defendida
-            scout_ff INTEGER DEFAULT 0, -- Finalização Fora
-            scout_fs INTEGER DEFAULT 0, -- Falta Sofrida
-            scout_g INTEGER DEFAULT 0,  -- Gol
-            scout_gs INTEGER DEFAULT 0, -- Gol Sofrido
-            scout_i INTEGER DEFAULT 0,  -- Impedimento
-            scout_sg INTEGER DEFAULT 0, -- Sem Gol
-            PRIMARY KEY (atleta_id, rodada_id),
-            FOREIGN KEY (clube_id) REFERENCES clubes(id),
-            FOREIGN KEY (posicao_id) REFERENCES posicoes(id)
-        )
-    ''')
-    conn.commit()
-
 def update_pontuados(conn, pontuados_data, rodada):
     from psycopg2.extras import execute_values
     import time

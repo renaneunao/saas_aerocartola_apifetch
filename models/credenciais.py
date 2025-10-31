@@ -1,22 +1,6 @@
 import psycopg2
 from typing import List, Dict
 
-def create_credenciais_table(conn: psycopg2.extensions.connection):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS credenciais (
-            id SERIAL PRIMARY KEY,
-            nome TEXT NOT NULL,
-            env_key TEXT UNIQUE,
-            access_token TEXT,
-            refresh_token TEXT,
-            id_token TEXT,
-            estrategia INTEGER DEFAULT 1,
-            essential_cookies TEXT
-        )
-    ''')
-    conn.commit()
-
 def insert_credencial(conn: psycopg2.extensions.connection, nome: str, env_key: str, access_token: str = None, refresh_token: str = None, id_token: str = None, estrategia: int = 1, essential_cookies: str = None):
     cursor = conn.cursor()
     cursor.execute('''

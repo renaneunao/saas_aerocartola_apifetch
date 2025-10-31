@@ -1,22 +1,5 @@
 from utils.utilidades import printdbg
 
-def create_destaques_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS destaques (
-            atleta_id INTEGER PRIMARY KEY,
-            posicao TEXT,
-            posicao_abreviacao TEXT,
-            clube_id INTEGER,
-            clube TEXT,
-            apelido TEXT,
-            preco_editorial REAL,
-            escalacoes INTEGER,
-            FOREIGN KEY (clube_id) REFERENCES clubes(id)
-        )
-    ''')
-    conn.commit()
-
 def update_destaques(conn, destaques_data):
     cursor = conn.cursor()
 

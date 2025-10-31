@@ -1,23 +1,3 @@
-def create_partidas_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS partidas (
-            partida_id INTEGER PRIMARY KEY,
-            rodada_id INTEGER,
-            clube_casa_id INTEGER,
-            clube_visitante_id INTEGER,
-            placar_oficial_mandante INTEGER,
-            placar_oficial_visitante INTEGER,
-            local TEXT,
-            partida_data TEXT,
-            valida BOOLEAN,
-            timestamp INTEGER,
-            FOREIGN KEY (clube_casa_id) REFERENCES clubes(id),
-            FOREIGN KEY (clube_visitante_id) REFERENCES clubes(id)
-        )
-    ''')
-    conn.commit()
-
 def update_partidas(conn, partidas_data, rodada):
     cursor = conn.cursor()
     # Se já existem partidas cadastradas para a rodada, pula

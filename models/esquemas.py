@@ -1,19 +1,3 @@
-def create_esquemas_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS esquemas (
-            esquema_id INTEGER PRIMARY KEY,
-            nome TEXT,
-            ata INTEGER,
-            gol INTEGER,
-            lat INTEGER,
-            mei INTEGER,
-            tec INTEGER,
-            zag INTEGER
-        )
-    ''')
-    conn.commit()
-
 def update_esquemas(conn, esquemas_data):
     cursor = conn.cursor()
     for esquema in esquemas_data:

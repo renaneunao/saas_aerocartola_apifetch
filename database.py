@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 # Carrega variáveis de ambiente do .env com encoding utf-8
@@ -72,6 +73,60 @@ def execute_query(query, params=None, fetch_one=False, fetch_all=False):
         conn.rollback()
         print(f"Erro na query: {e}")
         return None
+    finally:
+        close_db_connection(conn)
+
+def initialize_database():
+    """Inicializa o banco de dados executando o arquivo init.sql"""
+    conn = get_db_connection()
+    if not conn:
+        print("❌ Falha ao conectar ao banco de dados para inicialização")
+        return False
+    
+    try:
+        # Ler o arquivo init.sql
+        init_sql_path = Path(__file__).parent / 'init.sql'
+        if not init_sql_path.exists():
+            print(f"❌ Arquivo init.sql não encontrado em {init_sql_path}")
+            return False
+        
+        with open(init_sql_path, 'r', encoding='utf-8') as f:
+            sql_content = f.read()
+        
+        # Dividir o SQL em instruções individuais e executar uma por uma
+        cursor = conn.cursor()
+        # Dividir por ponto-e-vírgula e filtrar instruções vazias
+        statements = [s.strip() for s in sql_content.split(';') if s.strip()]
+        
+        for statement in statements:
+            # Remover comentários de linha (-- até o fim da linha)
+            lines = []
+            for line in statement.split('\n'):
+                if '--' in line:
+                    # Manter apenas a parte antes do comentário
+                    comment_pos = line.find('--')
+                    if comment_pos >= 0:
+                        line = line[:comment_pos].rstrip()
+                if line.strip():
+                    lines.append(line)
+            
+            cleaned_statement = '\n'.join(lines).strip()
+            if cleaned_statement:  # Pular strings vazias após limpeza
+                cursor.execute(cleaned_statement)
+        
+        conn.commit()
+        cursor.close()
+        
+        print("✅ Banco de dados inicializado com sucesso!")
+        return True
+        
+    except psycopg2.Error as e:
+        conn.rollback()
+        print(f"❌ Erro ao inicializar banco de dados: {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Erro ao ler arquivo init.sql: {e}")
+        return False
     finally:
         close_db_connection(conn)
 
