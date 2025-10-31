@@ -170,6 +170,17 @@ def initialize_database():
         cursor.close()
         
         print("✅ Banco de dados inicializado com sucesso!")
+        
+        # Verificar e inserir credencial padrão do .env se necessário
+        try:
+            from insert_default_credential import main as insert_credential_main
+            print("ℹ️  Verificando credencial padrão Aero-RBSV...")
+            insert_credential_main()
+        except ImportError:
+            print("⚠️  Script insert_default_credential.py não encontrado. Credencial padrão não será inserida.")
+        except Exception as e:
+            print(f"⚠️  Erro ao verificar/inserir credencial padrão: {e}")
+        
         return True
         
     except psycopg2.Error as e:
