@@ -12,6 +12,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       FETCH_INTERVAL_MINUTES: ${FETCH_INTERVAL_MINUTES:-5}
+      # Credenciais do Cartola FC
+      AERO_RBSV_ACCESS_TOKEN: ${AERO_RBSV_ACCESS_TOKEN}
+      AERO_RBSV_REFRESH_TOKEN: ${AERO_RBSV_REFRESH_TOKEN}
+      AERO_RBSV_ID_TOKEN: ${AERO_RBSV_ID_TOKEN}
     volumes:
       - ./logs:/app/logs
       - ./data_fetcher.log:/app/data_fetcher.log
