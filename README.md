@@ -54,12 +54,12 @@ Configure o arquivo `.env` com as credenciais do PostgreSQL e execute:
 docker-compose up -d
 ```
 
-O docker-compose utiliza a imagem pronta do Docker Hub (`renaneunao/data-fetcher:latest`), que é buildada automaticamente via GitHub Actions.
+O docker-compose utiliza a imagem pronta do Docker Hub (`renaneunao/cartola-aero-data-fetcher:latest`), que é buildada automaticamente via GitHub Actions.
 
 ### Run Manual
 
 ```bash
-docker run --env-file .env -d --name data-fetcher renaneunao/data-fetcher:latest
+docker run --env-file .env -d --name cartola-aero-data-fetcher renaneunao/cartola-aero-data-fetcher:latest
 ```
 
 ## 📝 Logs

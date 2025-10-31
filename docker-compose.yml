@@ -1,7 +1,7 @@
 services:
   data-fetcher:
-    image: renaneunao/data-fetcher:latest
-    container_name: data-fetcher-container
+    image: renaneunao/cartola-aero-data-fetcher:latest
+    container_name: cartola-aero-data-fetcher-container
     restart: unless-stopped
     env_file:
       - .env

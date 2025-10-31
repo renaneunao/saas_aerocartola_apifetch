@@ -26,7 +26,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: renaneunao/data-fetcher:latest
+        tags: renaneunao/cartola-aero-data-fetcher:latest
     
     - name: Update Docker Hub description
       run: |
@@ -34,7 +34,7 @@ jobs:
           -H "Authorization: JWT ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
           -H "Content-Type: application/json" \
           -d '{"full_description": "Data Fetcher Service - Container 1: Coleta dados da API do Cartola FC periodicamente"}' \
-          "https://hub.docker.com/v2/repositories/renaneunao/data-fetcher/"
+          "https://hub.docker.com/v2/repositories/renaneunao/cartola-aero-data-fetcher/"
 
     - name: Verify deployment
       run: echo "Docker image built and pushed successfully to Docker Hub!"
