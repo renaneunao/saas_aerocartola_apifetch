@@ -42,7 +42,7 @@ def get_tokens_from_json():
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except (json.JSONDecodeError, Exception) as e:
-        print(f"⚠️  Erro ao ler JSON: {e}")
+        print(f"[AVISO] Erro ao ler JSON: {e}")
         return None
 
 def main():
@@ -53,18 +53,18 @@ def main():
     
     # Se não encontrou no .env, tentar do JSON (fallback)
     if not tokens:
-        print("ℹ️  Tokens não encontrados no .env, tentando do refresh_token.json...")
+        print("[INFO] Tokens nao encontrados no .env, tentando do refresh_token.json...")
         tokens = get_tokens_from_json()
     
     if not tokens:
-        print("❌ Tokens não encontrados nem no .env nem no refresh_token.json!")
-        print("   Configure as variáveis AERO_RBSV_ACCESS_TOKEN, AERO_RBSV_REFRESH_TOKEN e AERO_RBSV_ID_TOKEN no .env")
+        print("[ERRO] Tokens nao encontrados nem no .env nem no refresh_token.json!")
+        print("   Configure as variaveis AERO_RBSV_ACCESS_TOKEN, AERO_RBSV_REFRESH_TOKEN e AERO_RBSV_ID_TOKEN no .env")
         return False
     
     # Conectar ao banco
     conn = get_db_connection()
     if not conn:
-        print("❌ Falha ao conectar ao banco de dados")
+        print("[ERRO] Falha ao conectar ao banco de dados")
         return False
     
     try:
@@ -72,7 +72,7 @@ def main():
         existing_credential = get_credencial_by_env_key(conn, 'AERO_RBSV')
         
         if existing_credential:
-            print("ℹ️  Credencial 'Aero-RBSV' já existe no banco de dados (ID: {})".format(existing_credential['id']))
+            print("[INFO] Credencial 'Aero-RBSV' ja existe no banco de dados (ID: {})".format(existing_credential['id']))
             return True
         
         # Inserir credencial com estratégia 1 (só se não existir)
@@ -86,13 +86,13 @@ def main():
             estrategia=1
         )
         
-        print("✅ Credencial 'Aero-RBSV' inserida com sucesso!")
+        print("[OK] Credencial 'Aero-RBSV' inserida com sucesso!")
         print("   - env_key: AERO_RBSV")
-        print("   - estratégia: 1")
+        print("   - estrategia: 1")
         return True
         
     except Exception as e:
-        print(f"❌ Erro ao inserir credencial: {e}")
+        print(f"[ERRO] Erro ao inserir credencial: {e}")
         return False
     finally:
         close_db_connection(conn)

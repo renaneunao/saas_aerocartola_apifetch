@@ -119,27 +119,27 @@ def create_database_if_not_exists():
         return True
         
     except psycopg2.Error as e:
-        print(f"❌ Erro ao criar banco de dados: {e}")
+        print(f"[ERRO] Erro ao criar banco de dados: {e}")
         return False
 
 def initialize_database():
     """Inicializa o banco de dados executando o arquivo init.sql"""
     # Primeiro, criar o banco se não existir
     if not create_database_if_not_exists():
-        print("❌ Falha ao criar/verificar banco de dados")
+        print("[ERRO] Falha ao criar/verificar banco de dados")
         return False
     
     # Agora conectar ao banco e executar o init.sql
     conn = get_db_connection()
     if not conn:
-        print("❌ Falha ao conectar ao banco de dados para inicialização")
+        print("[ERRO] Falha ao conectar ao banco de dados para inicialização")
         return False
     
     try:
         # Ler o arquivo init.sql
         init_sql_path = Path(__file__).parent / 'init.sql'
         if not init_sql_path.exists():
-            print(f"❌ Arquivo init.sql não encontrado em {init_sql_path}")
+            print(f"[ERRO] Arquivo init.sql nao encontrado em {init_sql_path}")
             return False
         
         with open(init_sql_path, 'r', encoding='utf-8') as f:
@@ -169,26 +169,26 @@ def initialize_database():
         conn.commit()
         cursor.close()
         
-        print("✅ Banco de dados inicializado com sucesso!")
+        print("[OK] Banco de dados inicializado com sucesso!")
         
         # Verificar e inserir credencial padrão do .env se necessário
         try:
             from insert_default_credential import main as insert_credential_main
-            print("ℹ️  Verificando credencial padrão Aero-RBSV...")
+            print("[INFO] Verificando credencial padrao Aero-RBSV...")
             insert_credential_main()
         except ImportError:
-            print("⚠️  Script insert_default_credential.py não encontrado. Credencial padrão não será inserida.")
+            print("[AVISO] Script insert_default_credential.py nao encontrado. Credencial padrao nao sera inserida.")
         except Exception as e:
-            print(f"⚠️  Erro ao verificar/inserir credencial padrão: {e}")
+            print(f"[AVISO] Erro ao verificar/inserir credencial padrao: {e}")
         
         return True
         
     except psycopg2.Error as e:
         conn.rollback()
-        print(f"❌ Erro ao inicializar banco de dados: {e}")
+        print(f"[ERRO] Erro ao inicializar banco de dados: {e}")
         return False
     except Exception as e:
-        print(f"❌ Erro ao ler arquivo init.sql: {e}")
+        print(f"[ERRO] Erro ao ler arquivo init.sql: {e}")
         return False
     finally:
         close_db_connection(conn)
@@ -197,9 +197,9 @@ def test_connection():
     """Testa a conexão com o banco"""
     conn = get_db_connection()
     if conn:
-        print("✅ Conexão com PostgreSQL estabelecida com sucesso!")
+        print("[OK] Conexao com PostgreSQL estabelecida com sucesso!")
         close_db_connection(conn)
         return True
     else:
-        print("❌ Falha na conexão com PostgreSQL")
+        print("[ERRO] Falha na conexao com PostgreSQL")
         return False
