@@ -110,9 +110,9 @@ def create_database_if_not_exists():
         if not exists:
             # Criar o banco de dados
             cursor.execute(f'CREATE DATABASE "{db_name}"')
-            print(f"✅ Banco de dados '{db_name}' criado com sucesso!")
+            print(f"[OK] Banco de dados '{db_name}' criado com sucesso!")
         else:
-            print(f"ℹ️  Banco de dados '{db_name}' já existe.")
+            print(f"[INFO] Banco de dados '{db_name}' ja existe.")
         
         cursor.close()
         conn.close()

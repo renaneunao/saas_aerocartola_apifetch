@@ -151,7 +151,7 @@ class DataFetcherService:
         """
         Retorna lista de rodadas faltantes para uma tabela.
         
-        Para partidas: verifica todas as rodadas de 1 até rodada_atual
+        Para partidas: verifica todas as rodadas de 1 até rodada_atual (incluindo a atual)
         Para pontuados: verifica todas as rodadas de 1 até rodada_atual - 1
         """
         conn = get_db_connection()
@@ -163,13 +163,13 @@ class DataFetcherService:
             
             # Determinar range de rodadas a verificar
             if table_name == 'pontuados':
-                # Pontuados: até rodada anterior
+                # Pontuados: até rodada anterior (não inclui a atual, pois ainda não aconteceu)
                 min_round = 1
                 max_round = rodada_atual - 1 if rodada_atual > 1 else 0
             elif table_name == 'partidas':
-                # Partidas: até rodada anterior (rodada_atual - 1)
+                # Partidas: inclui a rodada atual (para ter os dados dos jogos que vão acontecer)
                 min_round = 1
-                max_round = rodada_atual - 1 if rodada_atual > 1 else 0
+                max_round = rodada_atual
             else:
                 cursor.close()
                 return []
@@ -582,23 +582,19 @@ class DataFetcherService:
             if rodada_atual:
                 logger.info(f"Rodada atual detectada: {rodada_atual}")
                 
-                # PARTIDAS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1)
-                if rodada_atual > 1:
-                    logger.info("Verificando rodadas de partidas faltantes...")
-                    missing_partidas = self.get_missing_rounds('partidas', rodada_atual)
-                    if missing_partidas:
-                        logger.info(f"Rodadas de partidas faltantes encontradas: {missing_partidas}")
-                        for rodada_missing in missing_partidas:
-                            logger.info(f"Buscando partidas da rodada {rodada_missing}...")
-                            self.fetch_and_store_partidas_per_round(rodada_missing)
-                        results['partidas'] = True
-                    else:
-                        logger.info(f"Todas as partidas das rodadas (1 até {rodada_atual - 1}) já estão atualizadas")
-                        # Marca no tracking mesmo se não precisou buscar nada
-                        self.mark_table_updated('partidas')
-                        results['partidas'] = True
+                # PARTIDAS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual, incluindo a atual)
+                logger.info("Verificando rodadas de partidas faltantes...")
+                missing_partidas = self.get_missing_rounds('partidas', rodada_atual)
+                if missing_partidas:
+                    logger.info(f"Rodadas de partidas faltantes encontradas: {missing_partidas}")
+                    for rodada_missing in missing_partidas:
+                        logger.info(f"Buscando partidas da rodada {rodada_missing}...")
+                        self.fetch_and_store_partidas_per_round(rodada_missing)
+                    results['partidas'] = True
                 else:
-                    logger.info("Rodada atual é 1, não há rodadas anteriores para buscar partidas")
+                    logger.info(f"Todas as partidas das rodadas (1 até {rodada_atual}) já estão atualizadas")
+                    # Marca no tracking mesmo se não precisou buscar nada
+                    self.mark_table_updated('partidas')
                     results['partidas'] = True
                 
                 # Destaques (atualizados a cada 5 minutos)
