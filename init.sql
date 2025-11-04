@@ -2,7 +2,7 @@
 -- Todas as tabelas são criadas aqui na ordem correta (respeitando foreign keys)
 
 -- Tabelas base (sem dependências)
-CREATE TABLE IF NOT EXISTS clubes (
+CREATE TABLE IF NOT EXISTS acf_clubes (
     id INTEGER PRIMARY KEY,
     nome TEXT,
     abreviacao TEXT,
@@ -12,18 +12,18 @@ CREATE TABLE IF NOT EXISTS clubes (
     url_editoria TEXT
 );
 
-CREATE TABLE IF NOT EXISTS posicoes (
+CREATE TABLE IF NOT EXISTS acf_posicoes (
     id INTEGER PRIMARY KEY,
     nome TEXT,
     abreviacao TEXT
 );
 
-CREATE TABLE IF NOT EXISTS status (
+CREATE TABLE IF NOT EXISTS acf_status (
     id INTEGER PRIMARY KEY,
     nome TEXT
 );
 
-CREATE TABLE IF NOT EXISTS credenciais (
+CREATE TABLE IF NOT EXISTS acf_credenciais (
     id SERIAL PRIMARY KEY,
     nome TEXT NOT NULL,
     env_key TEXT UNIQUE,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS credenciais (
     essential_cookies TEXT
 );
 
-CREATE TABLE IF NOT EXISTS esquemas (
+CREATE TABLE IF NOT EXISTS acf_esquemas (
     esquema_id INTEGER PRIMARY KEY,
     nome TEXT,
     ata INTEGER,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS esquemas (
 );
 
 -- Tabelas que dependem de clubes, posicoes, status
-CREATE TABLE IF NOT EXISTS atletas (
+CREATE TABLE IF NOT EXISTS acf_atletas (
     atleta_id INTEGER PRIMARY KEY,
     rodada_id INTEGER,  -- Apenas para referência, não parte da chave
     clube_id INTEGER,
@@ -62,13 +62,13 @@ CREATE TABLE IF NOT EXISTS atletas (
     apelido TEXT,
     nome TEXT,
     foto TEXT,
-    FOREIGN KEY (clube_id) REFERENCES clubes(id),
-    FOREIGN KEY (posicao_id) REFERENCES posicoes(id),
-    FOREIGN KEY (status_id) REFERENCES status(id)
+    FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
+    FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id),
+    FOREIGN KEY (status_id) REFERENCES acf_status(id)
 );
 
 -- Tabelas que dependem de clubes
-CREATE TABLE IF NOT EXISTS partidas (
+CREATE TABLE IF NOT EXISTS acf_partidas (
     partida_id INTEGER PRIMARY KEY,
     rodada_id INTEGER,
     clube_casa_id INTEGER,
@@ -79,11 +79,11 @@ CREATE TABLE IF NOT EXISTS partidas (
     partida_data TEXT,
     valida BOOLEAN,
     timestamp INTEGER,
-    FOREIGN KEY (clube_casa_id) REFERENCES clubes(id),
-    FOREIGN KEY (clube_visitante_id) REFERENCES clubes(id)
+    FOREIGN KEY (clube_casa_id) REFERENCES acf_clubes(id),
+    FOREIGN KEY (clube_visitante_id) REFERENCES acf_clubes(id)
 );
 
-CREATE TABLE IF NOT EXISTS pontuados (
+CREATE TABLE IF NOT EXISTS acf_pontuados (
     atleta_id INTEGER,
     rodada_id INTEGER,
     clube_id INTEGER,
@@ -106,11 +106,11 @@ CREATE TABLE IF NOT EXISTS pontuados (
     scout_i INTEGER DEFAULT 0,  -- Impedimento
     scout_sg INTEGER DEFAULT 0, -- Sem Gol
     PRIMARY KEY (atleta_id, rodada_id),
-    FOREIGN KEY (clube_id) REFERENCES clubes(id),
-    FOREIGN KEY (posicao_id) REFERENCES posicoes(id)
+    FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
+    FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id)
 );
 
-CREATE TABLE IF NOT EXISTS destaques (
+CREATE TABLE IF NOT EXISTS acf_destaques (
     atleta_id INTEGER PRIMARY KEY,
     posicao TEXT,
     posicao_abreviacao TEXT,
@@ -119,15 +119,15 @@ CREATE TABLE IF NOT EXISTS destaques (
     apelido TEXT,
     preco_editorial REAL,
     escalacoes INTEGER,
-    FOREIGN KEY (clube_id) REFERENCES clubes(id)
+    FOREIGN KEY (clube_id) REFERENCES acf_clubes(id)
 );
 
 -- Tabelas que dependem de atletas
-CREATE TABLE IF NOT EXISTS gato_mestre (
+CREATE TABLE IF NOT EXISTS acf_gato_mestre (
     atleta_id INTEGER PRIMARY KEY,
     minimo_para_valorizar REAL,
     minutos_jogados INTEGER,
-    FOREIGN KEY (atleta_id) REFERENCES atletas(atleta_id)
+    FOREIGN KEY (atleta_id) REFERENCES acf_atletas(atleta_id)
 );
 
 -- Tabela de controle de atualizações

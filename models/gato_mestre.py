@@ -9,7 +9,7 @@ def update_gato_mestre(conn, gato_mestre_data):
         return
 
     # Limpar a tabela antes de inserir novos dados
-    cursor.execute('DELETE FROM gato_mestre')
+    cursor.execute('DELETE FROM acf_gato_mestre')
     conn.commit()
 
     # Inserção em lote para performance
@@ -32,7 +32,7 @@ def update_gato_mestre(conn, gato_mestre_data):
             return
 
         sql = '''
-            INSERT INTO gato_mestre (atleta_id, minimo_para_valorizar, minutos_jogados)
+            INSERT INTO acf_gato_mestre (atleta_id, minimo_para_valorizar, minutos_jogados)
             VALUES %s
             ON CONFLICT (atleta_id) DO UPDATE SET
                 minimo_para_valorizar = EXCLUDED.minimo_para_valorizar,

@@ -2,7 +2,7 @@ def update_esquemas(conn, esquemas_data):
     cursor = conn.cursor()
     for esquema in esquemas_data:
         cursor.execute('''
-            INSERT INTO esquemas (esquema_id, nome, ata, gol, lat, mei, tec, zag)
+            INSERT INTO acf_esquemas (esquema_id, nome, ata, gol, lat, mei, tec, zag)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (esquema_id) DO UPDATE SET
                 nome = EXCLUDED.nome,

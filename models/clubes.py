@@ -2,7 +2,7 @@ def update_clubes(conn, clubes_data):
     cursor = conn.cursor()
     for clube_id, clube in clubes_data.items():
         cursor.execute('''
-            INSERT INTO clubes (id, nome, abreviacao, slug, apelido, nome_fantasia, url_editoria)
+            INSERT INTO acf_clubes (id, nome, abreviacao, slug, apelido, nome_fantasia, url_editoria)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (id) DO UPDATE SET
                 nome = EXCLUDED.nome,

@@ -9,7 +9,7 @@ def update_destaques(conn, destaques_data):
         return
 
     # Limpar a tabela antes de inserir novos dados
-    cursor.execute('DELETE FROM destaques')
+    cursor.execute('DELETE FROM acf_destaques')
     conn.commit()
 
     for destaque in destaques_data:
@@ -21,7 +21,7 @@ def update_destaques(conn, destaques_data):
         try:
             atleta = destaque['Atleta']
             cursor.execute('''
-                INSERT INTO destaques (
+                INSERT INTO acf_destaques (
                     atleta_id, posicao, posicao_abreviacao, clube_id, clube, 
                     apelido, preco_editorial, escalacoes
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)

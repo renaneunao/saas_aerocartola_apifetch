@@ -7,10 +7,10 @@ def update_atletas(conn, atletas_data, rodada_atual):
     ids_novos = [a['atleta_id'] for a in atletas_data] if atletas_data else []
 
     if not ids_novos:
-        cursor.execute('DELETE FROM atletas')
+        cursor.execute('DELETE FROM acf_atletas')
     else:
         # Delete eficiente usando ANY(array)
-        cursor.execute("DELETE FROM atletas WHERE NOT (atleta_id = ANY(%s))", (ids_novos,))
+        cursor.execute("DELETE FROM acf_atletas WHERE NOT (atleta_id = ANY(%s))", (ids_novos,))
 
     # Upsert em lote com execute_values (muito mais rápido)
     rows = [(
@@ -20,7 +20,7 @@ def update_atletas(conn, atletas_data, rodada_atual):
     ) for a in atletas_data]
 
     insert_sql = '''
-        INSERT INTO atletas (atleta_id, rodada_id, clube_id, posicao_id, status_id, pontos_num,
+        INSERT INTO acf_atletas (atleta_id, rodada_id, clube_id, posicao_id, status_id, pontos_num,
                              media_num, variacao_num, preco_num, jogos_num, entrou_em_campo,
                              slug, apelido, nome, foto)
         VALUES %s

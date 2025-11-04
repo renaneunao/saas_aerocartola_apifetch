@@ -4,7 +4,7 @@ def update_pontuados(conn, pontuados_data, rodada):
     t0 = time.time()
     cursor = conn.cursor()
     # Se já existem pontuações para a rodada, pula
-    cursor.execute('SELECT COUNT(*) FROM pontuados WHERE rodada_id = %s', (rodada,))
+    cursor.execute('SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s', (rodada,))
     exists_count = cursor.fetchone()[0]
     if exists_count and exists_count > 0:
         print(f"Rodada {rodada} já existente em 'pontuados'. Pulando atualização.")
@@ -33,7 +33,7 @@ def update_pontuados(conn, pontuados_data, rodada):
         return
 
     insert_sql = '''
-        INSERT INTO pontuados (
+        INSERT INTO acf_pontuados (
             atleta_id, rodada_id, clube_id, posicao_id, pontuacao, entrou_em_campo, apelido, foto,
             scout_a, scout_ca, scout_cv, scout_de, scout_ds, scout_fc, scout_fd, scout_ff, scout_fs,
             scout_g, scout_gs, scout_i, scout_sg

@@ -1,14 +1,14 @@
 def update_partidas(conn, partidas_data, rodada):
     cursor = conn.cursor()
     # Se já existem partidas cadastradas para a rodada, pula
-    cursor.execute('SELECT COUNT(*) FROM partidas WHERE rodada_id = %s', (rodada,))
+    cursor.execute('SELECT COUNT(*) FROM acf_partidas WHERE rodada_id = %s', (rodada,))
     exists_count = cursor.fetchone()[0]
     if exists_count and exists_count > 0:
         print(f"Rodada {rodada} já existente em 'partidas'. Pulando atualização.")
         return
     for partida in partidas_data['partidas']:
         cursor.execute('''
-            INSERT INTO partidas (partida_id, rodada_id, clube_casa_id, clube_visitante_id, 
+            INSERT INTO acf_partidas (partida_id, rodada_id, clube_casa_id, clube_visitante_id, 
                                             placar_oficial_mandante, placar_oficial_visitante, local, 
                                             partida_data, valida, timestamp)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)

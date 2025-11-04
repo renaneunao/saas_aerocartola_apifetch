@@ -4,7 +4,7 @@ from typing import List, Dict
 def insert_credencial(conn: psycopg2.extensions.connection, nome: str, env_key: str, access_token: str = None, refresh_token: str = None, id_token: str = None, estrategia: int = 1, essential_cookies: str = None):
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO credenciais (nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies)
+        INSERT INTO acf_credenciais (nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (env_key) DO UPDATE SET
             nome = EXCLUDED.nome,
@@ -33,13 +33,13 @@ def update_tokens_by_env_key(conn: psycopg2.extensions.connection, env_key: str,
     if not sets:
         return
     params.append(env_key)
-    query = f"UPDATE credenciais SET {', '.join(sets)} WHERE env_key = %s"
+    query = f"UPDATE acf_credenciais SET {', '.join(sets)} WHERE env_key = %s"
     cursor.execute(query, params)
     conn.commit()
 
 def get_all_credenciais(conn: psycopg2.extensions.connection) -> List[Dict]:
     cursor = conn.cursor()
-    cursor.execute('SELECT id, nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies FROM credenciais')
+    cursor.execute('SELECT id, nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies FROM acf_credenciais')
     rows = cursor.fetchall()
     result = []
     for r in rows:
@@ -58,7 +58,7 @@ def get_all_credenciais(conn: psycopg2.extensions.connection) -> List[Dict]:
 def get_credencial_by_env_key(conn: psycopg2.extensions.connection, env_key: str) -> Dict:
     """Retorna uma única credencial pelo env_key ou None se não existir."""
     cursor = conn.cursor()
-    cursor.execute('SELECT id, nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies FROM credenciais WHERE env_key = %s LIMIT 1', (env_key,))
+    cursor.execute('SELECT id, nome, env_key, access_token, refresh_token, id_token, estrategia, essential_cookies FROM acf_credenciais WHERE env_key = %s LIMIT 1', (env_key,))
     r = cursor.fetchone()
     if not r:
         return None

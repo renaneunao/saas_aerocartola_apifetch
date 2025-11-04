@@ -130,6 +130,15 @@ class DataFetcherService:
     
     # ========== FUNÇÕES AUXILIARES DE CONTROLE DE ATUALIZAÇÃO ==========
     
+    def _get_table_name(self, table_name: str) -> str:
+        """Retorna o nome da tabela com prefixo acf_ se necessário"""
+        # Tabelas que precisam do prefixo acf_
+        acf_tables = ['atletas', 'clubes', 'posicoes', 'status', 'credenciais', 'esquemas', 
+                      'partidas', 'pontuados', 'destaques', 'gato_mestre']
+        if table_name in acf_tables:
+            return f'acf_{table_name}'
+        return table_name
+    
     def table_has_data(self, table_name: str) -> bool:
         """Verifica se uma tabela tem dados"""
         conn = get_db_connection()
@@ -137,7 +146,8 @@ class DataFetcherService:
             return False
         try:
             cursor = conn.cursor()
-            cursor.execute(f'SELECT COUNT(*) FROM "{table_name}"')
+            actual_table_name = self._get_table_name(table_name)
+            cursor.execute(f'SELECT COUNT(*) FROM "{actual_table_name}"')
             count = cursor.fetchone()[0]
             cursor.close()
             return count > 0
@@ -183,7 +193,8 @@ class DataFetcherService:
                 min_round = max(min_round, max_round - max_rounds_to_check + 1)
             
             # Buscar todas as rodadas que existem no banco
-            cursor.execute(f"SELECT DISTINCT rodada_id FROM {table_name} WHERE rodada_id BETWEEN %s AND %s", (min_round, max_round))
+            actual_table_name = self._get_table_name(table_name)
+            cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s", (min_round, max_round))
             existing_rounds = {row[0] for row in cursor.fetchall()}
             
             # Encontrar rodadas faltantes
@@ -213,14 +224,14 @@ class DataFetcherService:
             
             # Para partidas, verificar se já existe partida para essa rodada
             if table_name == 'partidas':
-                cursor.execute("SELECT COUNT(*) FROM partidas WHERE rodada_id = %s", (rodada,))
+                cursor.execute("SELECT COUNT(*) FROM acf_partidas WHERE rodada_id = %s", (rodada,))
                 count = cursor.fetchone()[0]
                 cursor.close()
                 return count > 0
             
             # Para pontuados, verificar se já existe pontuados para essa rodada
             if table_name == 'pontuados':
-                cursor.execute("SELECT COUNT(*) FROM pontuados WHERE rodada_id = %s", (rodada,))
+                cursor.execute("SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s", (rodada,))
                 count = cursor.fetchone()[0]
                 cursor.close()
                 return count > 0
