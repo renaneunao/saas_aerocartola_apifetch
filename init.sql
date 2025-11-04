@@ -130,12 +130,6 @@ CREATE TABLE IF NOT EXISTS acf_gato_mestre (
     FOREIGN KEY (atleta_id) REFERENCES acf_atletas(atleta_id)
 );
 
--- Tabela de controle de atualizações
-CREATE TABLE IF NOT EXISTS updates_tracking (
-    table_name TEXT PRIMARY KEY,
-    last_update TIMESTAMP DEFAULT NOW()
-);
-
 -- Inserir credencial padrão do time Aero-RBSV
 -- NOTA: As credenciais devem ser inseridas via script Python (insert_default_credential.py)
 -- que lê os tokens do arquivo .env. Execute após inicializar o banco:

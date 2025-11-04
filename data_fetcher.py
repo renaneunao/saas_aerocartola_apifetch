@@ -241,29 +241,8 @@ class DataFetcherService:
             cursor.close()
             return False
         except Exception as e:
-            logger.error(f"Erro ao verificar updates_tracking para {table_name}: {e}")
+            logger.error(f"Erro ao verificar atualização para {table_name}: {e}")
             return False
-        finally:
-            close_db_connection(conn)
-    
-    def mark_table_updated(self, table_name: str):
-        """Marca uma tabela como atualizada no updates_tracking"""
-        conn = get_db_connection()
-        if not conn:
-            return
-        try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO updates_tracking (table_name, last_update)
-                VALUES (%s, NOW())
-                ON CONFLICT (table_name) 
-                DO UPDATE SET last_update = NOW()
-            """, (table_name,))
-            conn.commit()
-            cursor.close()
-        except Exception as e:
-            logger.error(f"Erro ao marcar {table_name} como atualizada: {e}")
-            conn.rollback()
         finally:
             close_db_connection(conn)
     
@@ -324,8 +303,6 @@ class DataFetcherService:
                         logger.info(f"Clubes atualizados: {len(data['clubes'])}")
                     else:
                         logger.info("Clubes já possui dados, pulando atualização")
-                    # Sempre marca no tracking, mesmo se pulou
-                    self.mark_table_updated('clubes')
                 
                 # Atualizar posições (só se não tiver dados)
                 if 'posicoes' in data:
@@ -335,8 +312,6 @@ class DataFetcherService:
                         logger.info(f"Posições atualizadas: {len(data['posicoes'])}")
                     else:
                         logger.info("Posições já possui dados, pulando atualização")
-                    # Sempre marca no tracking, mesmo se pulou
-                    self.mark_table_updated('posicoes')
                 
                 # Atualizar status (só se não tiver dados)
                 if 'status' in data:
@@ -346,8 +321,6 @@ class DataFetcherService:
                         logger.info(f"Status atualizados: {len(data['status'])}")
                     else:
                         logger.info("Status já possui dados, pulando atualização")
-                    # Sempre marca no tracking, mesmo se pulou
-                    self.mark_table_updated('status')
                 
                 # ===== TABELAS QUE ATUALIZAM SEMPRE (A CADA 5 MIN) =====
                 
@@ -376,7 +349,6 @@ class DataFetcherService:
                     
                     update_atletas(conn, atletas_data, rodada_atual)
                     logger.info(f"Atletas atualizados: {len(atletas_data)}")
-                    self.mark_table_updated('atletas')
                 
                 logger.info("Dados do mercado Cartola processados com sucesso")
                 return True
@@ -438,7 +410,6 @@ class DataFetcherService:
             
             try:
                 update_partidas(conn, partidas_data, rodada)
-                self.mark_table_updated('partidas')
                 logger.info(f"Partidas da rodada {rodada} armazenadas com sucesso")
                 return True
             finally:
@@ -470,7 +441,6 @@ class DataFetcherService:
             
             try:
                 update_pontuados(conn, pontuados_data, rodada)
-                self.mark_table_updated('pontuados')
                 logger.info(f"Atletas pontuados da rodada {rodada} armazenados com sucesso")
                 return True
             finally:
@@ -491,8 +461,6 @@ class DataFetcherService:
             # Verificar se já tem dados
             if self.table_has_data('esquemas'):
                 logger.info("Esquemas já possui dados, pulando atualização")
-                # Sempre marca no tracking, mesmo se pulou
-                self.mark_table_updated('esquemas')
                 return True
             
             logger.info("Buscando esquemas táticos...")
@@ -514,8 +482,6 @@ class DataFetcherService:
                     logger.info(f"Esquemas atualizados: {len(esquemas_data)}")
                 else:
                     logger.info("Esquemas já possui dados, pulando atualização")
-                # Sempre marca no tracking, mesmo se pulou
-                self.mark_table_updated('esquemas')
                 return True
             finally:
                 close_db_connection(conn)
@@ -546,7 +512,6 @@ class DataFetcherService:
             
             try:
                 update_destaques(conn, destaques_data)
-                self.mark_table_updated('destaques')
                 logger.info(f"Destaques atualizados: {len(destaques_data)} itens")
                 return True
             finally:
@@ -604,8 +569,6 @@ class DataFetcherService:
                     results['partidas'] = True
                 else:
                     logger.info(f"Todas as partidas das rodadas (1 até {rodada_atual}) já estão atualizadas")
-                    # Marca no tracking mesmo se não precisou buscar nada
-                    self.mark_table_updated('partidas')
                     results['partidas'] = True
                 
                 # Destaques (atualizados a cada 5 minutos)
