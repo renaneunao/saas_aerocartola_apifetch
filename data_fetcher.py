@@ -17,6 +17,7 @@ from datetime import datetime
 from typing import Optional, Dict, Any
 from functools import wraps
 import requests
+import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
@@ -53,6 +54,14 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Timezone de Brasília
+BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
+
+def get_brasilia_datetime() -> str:
+    """Retorna a data e hora atual no horário de Brasília formatada"""
+    brasilia_now = datetime.now(BRASILIA_TZ)
+    return brasilia_now.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 # Rate limiting simples
 class RateLimiter:
@@ -524,8 +533,12 @@ class DataFetcherService:
     def run_fetch_cycle(self):
         """Executa um ciclo completo de fetch de dados"""
         start_time = time.time()
+        brasilia_datetime = get_brasilia_datetime()
+        print(f"\n{'='*60}")
+        print(f"Iniciando ciclo de fetch - {brasilia_datetime} (Horario de Brasilia)")
+        print(f"{'='*60}\n")
         logger.info("=" * 60)
-        logger.info(f"Iniciando ciclo de fetch - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info(f"Iniciando ciclo de fetch - {brasilia_datetime} (Horário de Brasília)")
         logger.info("=" * 60)
         
         results = {
@@ -592,17 +605,29 @@ class DataFetcherService:
                     results['pontuados'] = True  # Considera sucesso pois não há o que buscar
             
             elapsed_time = time.time() - start_time
+            brasilia_finish = get_brasilia_datetime()
             
             # Resumo do ciclo
+            print(f"\n{'='*60}")
+            print("Resumo do ciclo de fetch:")
+            print(f"  Inicio: {brasilia_datetime}")
+            print(f"  Fim: {brasilia_finish}")
+            for task, success in results.items():
+                status = "[OK]" if success else "[ERRO]"
+                print(f"  {status} {task}: {'Sucesso' if success else 'Falhou'}")
+            print(f"  Tempo total: {elapsed_time:.2f}s")
+            print(f"{'='*60}\n")
             logger.info("=" * 60)
             logger.info("Resumo do ciclo de fetch:")
+            logger.info(f"  Início: {brasilia_datetime}")
+            logger.info(f"  Fim: {brasilia_finish}")
             for task, success in results.items():
                 status = "[OK]" if success else "[ERRO]"
                 logger.info(f"  {status} {task}: {'Sucesso' if success else 'Falhou'}")
-            logger.info(f"Tempo total: {elapsed_time:.2f}s")
+            logger.info(f"  Tempo total: {elapsed_time:.2f}s")
             logger.info("=" * 60)
             
-            self.last_fetch_time = datetime.now()
+            self.last_fetch_time = datetime.now(BRASILIA_TZ)
             self.last_fetch_status = 'success' if all(results.values()) else 'partial'
             
         except Exception as e:
