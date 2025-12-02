@@ -566,8 +566,28 @@ class DataFetcherService:
             
             logger.info(f"Rodada atual validada: {rodada_atual}")
             
-            # 1. Buscar status do mercado
-            results['status'] = self.fetch_and_store_status()
+            # 0.1 Verificar status do mercado ANTES de atualizar qualquer tabela
+            status_data = fetch_status_data()
+            if status_data:
+                status_mercado = status_data.get('status_mercado')
+                logger.info(f"Status do mercado: {status_mercado}")
+                
+                if status_mercado == 2:
+                    logger.info("⚠️  MERCADO FECHADO (status_mercado=2) - Jogos acontecendo, pulando atualização das tabelas")
+                    logger.info("As tabelas serão atualizadas novamente quando o mercado abrir (rodada finalizar)")
+                    print(f"\n{'='*60}")
+                    print("⚠️  MERCADO FECHADO - Pulando atualização")
+                    print("Os jogos estão acontecendo. As tabelas serão atualizadas após o mercado abrir.")
+                    print(f"{'='*60}\n")
+                    self.last_fetch_status = 'skipped_market_closed'
+                    return
+                else:
+                    logger.info(f"✓ Mercado em estado adequado para atualização (status={status_mercado})")
+            else:
+                logger.warning("Não foi possível obter status do mercado. Continuando com atualização por segurança.")
+            
+            # 1. Status já foi verificado acima, marcar como sucesso
+            results['status'] = True
             
             # 2. Buscar dados principais do Cartola (atletas, clubes, etc.)
             results['cartola_data'] = self.fetch_and_store_cartola_data()
