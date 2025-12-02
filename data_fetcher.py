@@ -511,8 +511,16 @@ class DataFetcherService:
             destaques_data = fetch_destaques_data()
             
             if not destaques_data:
-                logger.warning("Nenhum destaque encontrado")
+                logger.warning("Nenhum destaque encontrado - a API pode ter retornado None ou lista vazia")
                 return False
+            
+            # Log adicional para debug
+            if isinstance(destaques_data, list):
+                logger.info(f"Dados de destaques recebidos: {len(destaques_data)} itens")
+                if len(destaques_data) > 0:
+                    logger.debug(f"Estrutura do primeiro item: {type(destaques_data[0])}")
+            else:
+                logger.warning(f"Formato inesperado de destaques_data: {type(destaques_data)}")
             
             conn = get_db_connection()
             if not conn:
@@ -521,7 +529,7 @@ class DataFetcherService:
             
             try:
                 update_destaques(conn, destaques_data)
-                logger.info(f"Destaques atualizados: {len(destaques_data)} itens")
+                logger.info(f"Destaques atualizados: {len(destaques_data) if isinstance(destaques_data, list) else 'N/A'} itens")
                 return True
             finally:
                 close_db_connection(conn)

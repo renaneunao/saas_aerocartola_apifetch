@@ -82,15 +82,26 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
                 update_tokens_by_env_key(conn2, env_key, access_token=new_access_token, refresh_token=new_refresh_token, id_token=new_id_token)
             finally:
                 close_db_connection(conn2)
+            printdbg(f"Token atualizado com sucesso para {env_key}")
             return new_access_token
         else:
-            print(f"Falha no refresh ({response.status_code}).")
+            error_msg = f"Falha no refresh ({response.status_code})"
+            try:
+                error_body = response.json()
+                error_msg += f": {error_body}"
+            except:
+                error_msg += f". Resposta: {response.text[:200]}"
+            printdbg(error_msg)
             return None
     except requests.exceptions.JSONDecodeError as e:
-        print(f"Erro ao parsear resposta do refresh: {e}")
+        printdbg(f"Erro ao parsear resposta do refresh: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            printdbg(f"Resposta recebida: {e.response.text[:200]}")
         return None
     except requests.exceptions.RequestException as e:
-        print(f"Erro de rede no refresh: {e}")
+        printdbg(f"Erro de rede no refresh: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            printdbg(f"Status: {e.response.status_code}, Resposta: {e.response.text[:200]}")
         return None
 
 def fetch_cartola_data():
@@ -167,9 +178,11 @@ def fetch_destaques_data(access_token=None, env_key="AERO_RBSV"):
     try:
         response = requests.get(API_URL_DESTAQUES, headers=headers)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+        printdbg(f"Destaques API retornou: tipo={type(data)}, tamanho={len(data) if isinstance(data, list) else 'N/A'}")
+        return data
     except requests.exceptions.RequestException as e:
-        if hasattr(e.response, 'status_code') and e.response.status_code == 401:
+        if hasattr(e, 'response') and e.response is not None and e.response.status_code == 401:
             printdbg(f"Token expirado ({env_key}). Atualizando...")
             new_token = refresh_access_token(token, env_key)
             if new_token:
@@ -177,15 +190,21 @@ def fetch_destaques_data(access_token=None, env_key="AERO_RBSV"):
                 try:
                     response = requests.get(API_URL_DESTAQUES, headers=headers)
                     response.raise_for_status()
-                    return response.json()
+                    data = response.json()
+                    printdbg(f"Destaques API retornou (após refresh): tipo={type(data)}, tamanho={len(data) if isinstance(data, list) else 'N/A'}")
+                    return data
                 except requests.exceptions.RequestException as e:
                     printdbg(f"Falha pós-refresh em destaques ({env_key}): {e}")
+                    if hasattr(e, 'response') and e.response is not None:
+                        printdbg(f"Status code: {e.response.status_code}, Response: {e.response.text[:200]}")
                     return None
             else:
                 printdbg(f"Refresh de token falhou ({env_key}).")
                 return None
         else:
             printdbg(f"Erro em destaques ({env_key}): {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                printdbg(f"Status code: {e.response.status_code}, Response: {e.response.text[:200]}")
             return None
 
 def fetch_gato_mestre_data(access_token=None, env_key="AERO_RBSV"):
