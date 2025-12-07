@@ -1,0 +1,337 @@
+﻿rodada,atleta_id,apelido,clube_id,clube,posicao_id,posicao,pontuacao,entrou_em_campo,foto,G,A,FD,FF,DE,DS,FS,FC,CA,CV,GS,SG,I,DP,FT,PC,PP,PS,V
+31,103445,Kaio Jorge,283,CRU,5,Atacante,19.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,2,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0
+31,104084,Carlos Miguel,275,PAL,1,Goleiro,18,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,10,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,68996,Willian José,265,BAH,5,Atacante,17.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,2,0,0,0,0,0,3,0,0,0,0,0,1,0,0,0,0,0,0
+31,90285,Bruno Henrique,262,FLA,5,Atacante,16.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,2,0,0,2,0,0,3,4,1,0,0,0,0,0,0,0,0,0,0
+31,78248,Gustavo Henrique,264,COR,3,Zagueiro,16.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,1,0,0,1,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,68928,Rafael,276,SAO,1,Goleiro,15.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,8,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,85048,Memphis Depay,264,COR,5,Atacante,15,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,1,0,1,2,0,0,3,1,0,0,0,0,0,0,1,0,0,0,0
+31,72294,Everson,282,CAM,1,Goleiro,13.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,7,0,0,0,1,0,0,1,0,0,0,0,0,0,0
+31,101908,Willian Machado,354,CEA,3,Zagueiro,13,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,5,1,0,0,0,0,1,0,0,0,0,0,0,0
+31,105175,Khellven,275,PAL,2,Lateral,12.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,1,0,0,0,2,0,2,0,0,0,1,0,0,0,0,0,0,0
+31,104085,Bruno Fuchs,275,PAL,3,Zagueiro,12.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,5,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,132264,Arroyo,283,CRU,5,Atacante,11.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,1,0,2,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,93411,Cantalapiedra,287,VIT,5,Atacante,10.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,1,0,0,0,1,2,0,0,0,0,0,0,0,1,0,0,0,0
+31,70592,Felipe Anderson,275,PAL,4,Meia,10.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,98873,Samuel Lino,262,FLA,5,Atacante,10,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,1,1,1,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0
+31,88393,Ayrton Lucas,262,FLA,2,Lateral,9.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,0,4,1,2,1,0,0,1,0,0,0,0,0,0,0
+31,96870,Emerson Royal,262,FLA,2,Lateral,9.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,2,1,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0
+31,87863,Arrascaeta,262,FLA,4,Meia,9.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,81952,Willian Oliveira,287,VIT,4,Meia,9.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,108713,Galeano,354,CEA,5,Atacante,9.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,1,0,0,0,0,0,3,0,0,0,0,0,1,0,0,0,0,0,0
+31,79266,Bruno Ferreira,354,CEA,1,Goleiro,9.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,3,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+31,98225,Pedro Raul,354,CEA,5,Atacante,9.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,1,0,1,1,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0
+31,110506,Abel Ferreira,275,PAL,6,Técnico,9.39,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,139076,Filipe Luís,262,FLA,6,Técnico,9.22,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,37457,Léo Condé,354,CEA,6,Técnico,9.22,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,63007,Neymar,277,SAN,4,Meia,9.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,1,2,0,0,0,4,1,0,0,0,0,0,0,0,0,0,0,0
+31,103912,Hernán Crespo,276,SAO,6,Técnico,8.940000000000001,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,101574,Hugo Souza,264,COR,1,Goleiro,8.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,3,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,93988,Breno Lopes,356,FOR,5,Atacante,8.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,1,1,1,0,0,4,0,0,0,0,0,2,0,0,0,0,0,0
+31,94067,Matheus Fernandes,280,RBB,4,Meia,8.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,1,0,0,1,0,1,0,2,1,0,0,0,0,0,0,0,0,0,0
+31,97900,Vitão,285,INT,3,Zagueiro,8.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,1,0,0,2,0,2,0,0,0,1,0,0,0,0,0,0,0
+31,107093,Luciano Juba,265,BAH,2,Lateral,8.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,1,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,108274,David Ricardo,263,BOT,3,Zagueiro,8.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,1,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,125488,João Pedro,264,COR,3,Zagueiro,8.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,1,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,141763,Fabiano Souza,354,CEA,2,Lateral,8.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,1,4,0,0,0,0,1,0,0,0,0,0,0,0
+31,84558,Lucas Romero,283,CRU,4,Meia,8.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,1,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,96793,Camutanga,287,VIT,3,Zagueiro,8.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,6,1,1,1,0,0,0,0,0,0,0,0,0,0
+31,101290,Ferreira,276,SAO,5,Atacante,8.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,1,0,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,71536,Luiz Gustavo,276,SAO,4,Meia,8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,73318,Daniel Borges,2305,MIR,2,Lateral,8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,1,0,1,2,1,0,0,0,1,0,0,0,0,0,0,0
+31,40990,Dorival Júnior,264,COR,6,Técnico,7.98,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,88963,Leonardo Jardim,283,CRU,6,Técnico,7.94,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,92811,Bruno Rodrigues,275,PAL,5,Atacante,7.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+31,104758,Enzo Díaz,276,SAO,2,Lateral,7.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,1,1,0,2,0,4,1,0,0,1,0,0,0,0,0,0,0
+31,108469,Adonis Frías,277,SAN,3,Zagueiro,7.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,1,0,0,1,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0
+31,111832,Jefté,275,PAL,2,Lateral,7.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,115537,Marcos Victor,354,CEA,3,Zagueiro,7.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,97460,João Victor,2305,MIR,3,Zagueiro,7.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,1,3,1,0,0,0,1,0,0,0,0,0,0,0
+31,123738,Herrera,356,FOR,5,Atacante,7.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,2,0,0,3,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,70164,Lucas Moura,276,SAO,4,Meia,7.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0
+31,88136,Ivan,285,INT,1,Goleiro,7.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,97899,Matheus Bahia,354,CEA,2,Lateral,7.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,2,0,2,0,0,0,1,0,0,0,0,0,0,0
+31,103056,Gabriel Brazão,277,SAN,1,Goleiro,7.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,6,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+31,99228,De la Cruz,262,FLA,4,Meia,7.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,1,2,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0
+31,91130,Fernandinho,354,CEA,5,Atacante,7.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,3,0,1,0,0,0,0,0,0,1,0,0,0,0
+31,112709,Kaiki Bruno,283,CRU,2,Lateral,7.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,1,0,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,0
+31,99248,Bareiro,356,FOR,5,Atacante,7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,1,0,0,0,0,0,1,5,0,0,0,0,0,0,0,0,0,0,0
+31,107174,Bruno Tabata,285,INT,4,Meia,6.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,3,2,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,107183,Léo Linck,263,BOT,1,Goleiro,6.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+31,97653,Murilo,275,PAL,3,Zagueiro,6.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,2,0,4,0,0,0,1,0,0,0,0,0,0,0
+31,96725,Saravia,282,CAM,2,Lateral,6.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0
+31,99552,Rossi,262,FLA,1,Goleiro,6.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,2,0,0,0,1,0,0,1,0,0,0,0,0,0,0
+31,102318,Caio Paulista,282,CAM,2,Lateral,6.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,111594,Micael,275,PAL,3,Zagueiro,6.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,98720,Angileri,264,COR,2,Lateral,6.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,123004,Tiago,265,BAH,5,Atacante,6.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,70449,Gabriel,292,SPT,1,Goleiro,6.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,8,0,0,0,1,0,3,0,0,0,0,0,0,0,0
+31,51413,Walter,2305,MIR,1,Goleiro,6.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,116065,Cuiabano,263,BOT,2,Lateral,6.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,82455,Zé Rafael,277,SAN,4,Meia,6.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,1,0,0,2,4,0,0,0,0,0,0,0,0,0,0,0,0
+31,91573,Arboleda,276,SAO,3,Zagueiro,6.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,1,0
+31,107554,Natanael,282,CAM,2,Lateral,6.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,1,0,0,0,1,2,0,0,0,1,0,0,0,0,0,0,0
+31,110426,Bernabéi,285,INT,2,Lateral,6.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,1,0,0,1,0,2,1,0,0,1,0,0,0,0,0,0,0
+31,42234,Cássio,283,CRU,1,Goleiro,6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,5,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+31,104075,Sabino,276,SAO,3,Zagueiro,5.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,116706,Andrés Gómez,267,VAS,5,Atacante,5.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,3,2,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,117330,Robert Renan,267,VAS,3,Zagueiro,5.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,1,1,0,3,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,117632,Garro,264,COR,4,Meia,5.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,1,0,0,0,0,3,2,0,0,0,0,0,0,0,0,0,0,0
+31,69783,Danilo,262,FLA,3,Zagueiro,5.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,71162,Vina,354,CEA,4,Meia,5.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,83528,Léo Pereira,262,FLA,3,Zagueiro,5.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,99889,Alan Franco,276,SAO,3,Zagueiro,5.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,2,0,4,1,0,0,1,0,0,0,0,0,0,0
+31,97341,Rogério Ceni,265,BAH,6,Técnico,5.73,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+31,102950,Facundo Torres,275,PAL,5,Atacante,5.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,2,6,1,0,0,0,0,0,0,0,0,0,0,0
+31,106202,Bruno Gomes,285,INT,2,Lateral,5.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0
+31,63110,Alan Ruschel,286,JUV,2,Lateral,5.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0
+31,100830,Brenno,356,FOR,1,Goleiro,5.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,5,0,0,0,0,0,1,0,0,0,0,0,0,0,0
+31,107908,Hugo,264,COR,2,Lateral,5.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+31,118774,Alexsander,282,CAM,4,Meia,5.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,3,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,70800,Jorge Sampaoli,282,CAM,6,Técnico,5.48,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,105807,Luan Freitas,286,JUV,3,Zagueiro,5.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,4,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,106708,Igor Formiga,286,JUV,2,Lateral,5.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,0,0,3,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,97898,Maílton,276,SAO,2,Lateral,5.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,0,2,2,0,0,0,1,0,0,0,0,0,0,0
+31,98517,Jean Lucas,265,BAH,4,Meia,5.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,2,0,3,1,4,0,0,0,0,0,0,0,0,0,0,0
+31,133669,Alysson,284,GRE,5,Atacante,5.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,38913,Nenê,286,JUV,4,Meia,5.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,3,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,104257,João Lucas,284,GRE,2,Lateral,5.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,3,1,2,0,0,0,0,0,0,0,0,0,0,0
+31,105531,Matheus Bidu,264,COR,2,Lateral,5.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0
+31,132553,Jemmes,2305,MIR,3,Zagueiro,5.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0
+31,91509,Rodrigo Sam,286,JUV,3,Zagueiro,5.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,1,0,2,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,91607,Rony,282,CAM,5,Atacante,5.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,1,0,0,1,5,0,0,0,0,0,0,0,0,0,0,0,0
+31,102928,Canobbio,266,FLU,5,Atacante,5.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,2,1,0,0,5,2,0,0,0,0,0,0,0,0,0,0,0
+31,100842,Ruan,282,CAM,3,Zagueiro,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,2,0,1,0,0,1,0,0,0,0,0,0,0
+31,105300,Ferraresi,276,SAO,3,Zagueiro,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,109401,Erick Pulga,265,BAH,5,Atacante,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,1,0,1,6,1,0,0,0,0,0,0,0,0,0,0,0
+31,122486,Rayan,267,VAS,5,Atacante,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,4,0,0,0,0,0,0,0,1,0,0,0,0
+31,146410,Marquinhos,263,BOT,3,Zagueiro,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+31,99274,Alexander Barboza,263,BOT,3,Zagueiro,5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,1,0,5,0,0,0,1,0,0,0,0,0,0,0
+31,92075,Ramón Díaz,285,INT,6,Técnico,4.98,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,70360,Eduardo Sasha,280,RBB,5,Atacante,4.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,1,0,0,0,2,1,0,0,0,0,0,0,1,0,0,0,0
+31,92182,Juninho,285,INT,3,Zagueiro,4.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,1,0,2,1,0,0,1,0,0,0,0,0,0,0
+31,96610,Matheus Pereira,283,CRU,4,Meia,4.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,2,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,97810,Erick,287,VIT,5,Atacante,4.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,1,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,92180,Jair Ventura,287,VIT,6,Técnico,4.86,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,108588,Tapia,276,SAO,5,Atacante,4.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,2,0,0,1,2,0,0,0,0,0,1,0,0,0,0,0,0
+31,140492,João Victor,262,FLA,3,Zagueiro,4.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0
+31,68991,Lucas Sasha,356,FOR,4,Meia,4.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,1,0,0,3,1,5,0,0,0,0,0,0,0,0,0,0,0
+31,91706,Marlon,284,GRE,2,Lateral,4.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,1,1,0,1,3,1,0,0,0,0,0,0,0,0,0,0,0
+31,95466,Igor Vinícius,277,SAN,2,Lateral,4.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,3,2,3,0,0,0,0,0,0,0,0,0,0,0
+31,104754,Juan Vojvoda,277,SAN,6,Técnico,4.54,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,83257,Gabriel,283,CRU,5,Atacante,4.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,1,1,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0
+31,104027,Rafael Guanaes,2305,MIR,6,Técnico,4.45,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,77664,Sérgio Oliveira,292,SPT,4,Meia,4.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,1,0,0,2,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,86686,Tchê Tchê,267,VAS,4,Meia,4.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,143194,Martín Palermo,356,FOR,6,Técnico,4.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,145269,Davide Ancelotti,263,BOT,6,Técnico,4.24,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,68708,Eduardo,283,CRU,4,Meia,4.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,3,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,72493,Alex Telles,263,BOT,2,Lateral,4.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0
+31,72951,Mercado,285,INT,3,Zagueiro,4.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0
+31,88312,Junior Alonso,282,CAM,3,Zagueiro,4.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0
+31,91639,Igor Cariús,292,SPT,2,Lateral,4.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,3,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,101708,Felipe Jonatan,2305,MIR,2,Lateral,4.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,0,3,0,0,0,1,0,0,0,0,0,0,0
+31,90703,Matheuzinho,287,VIT,4,Meia,4.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,3,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,104521,Vinícius Zanocelo,354,CEA,4,Meia,3.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,1,0,3,1,3,1,0,0,0,0,0,0,0,0,0,0
+31,112886,Lucas Barbosa,280,RBB,5,Atacante,3.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,1,0,0,0,1,0,5,1,0,0,0,1,0,0,0,0,0,0
+31,97095,Carlos Cuesta,267,VAS,3,Zagueiro,3.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,1,0,0,2,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,104994,Wagner Leonardo,284,GRE,3,Zagueiro,3.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,97645,Thiago Couto,287,VIT,1,Goleiro,3.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,6,0,0,0,0,0,3,0,0,0,0,1,0,0,0
+31,106147,Thiago Carpini,286,JUV,6,Técnico,3.75,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,100898,Vitinho,263,BOT,2,Lateral,3.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0
+31,70666,Marllon,354,CEA,3,Zagueiro,3.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0
+31,101960,Vitinho,285,INT,5,Atacante,3.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,2,0,1,2,2,0,0,0,0,0,0,0,0,0,0,0
+31,114405,Sinisterra,283,CRU,5,Atacante,3.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,142004,Amuzu,284,GRE,5,Atacante,3.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,1,1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0
+31,84523,Romarinho,292,SPT,5,Atacante,3.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,0,0,0,0
+31,85403,Danielzinho,2305,MIR,4,Meia,3.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,0,0,0,0
+31,37281,Mano Menezes,284,GRE,6,Técnico,3.45,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,101727,Matheuzinho,264,COR,2,Lateral,3.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,2,1,0,0,1,0,0,0,0,0,0,0
+31,83786,Neris,287,VIT,3,Zagueiro,3.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,1,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,72605,Vitor Hugo,282,CAM,3,Zagueiro,3.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0
+31,87008,Léo Jardim,267,VAS,1,Goleiro,3.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,4,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+31,93882,Cleiton,280,RBB,1,Goleiro,3.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,4,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+31,72391,Fernando Diniz,267,VAS,6,Técnico,3.12,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,110759,John Kennedy,266,FLU,5,Atacante,3.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,2,1,1,0,0,0,0,1,0,0,0,0,0,0
+31,72583,Pedro Henrique,354,CEA,5,Atacante,3.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,1,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0
+31,78605,Gabriel,280,RBB,4,Meia,3.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,2,2,3,0,0,0,0,0,0,0,0,0,0,0
+31,90608,Chico da Costa,2305,MIR,5,Atacante,3.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,3,1,1,0,0,0,1,0,1,0,0,0,0
+31,121792,André,284,GRE,5,Atacante,3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+31,91772,David Duarte,265,BAH,3,Zagueiro,3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+31,92085,Giovanny,286,JUV,5,Atacante,3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,95799,Artur,263,BOT,5,Atacante,3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,1,0,1,4,1,1,0,0,0,0,0,0,0,0,0,0
+31,97321,Alesson,2305,MIR,5,Atacante,3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,113078,Mancuso,356,FOR,2,Lateral,2.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,2,1,2,0,0,0,0,0,0,0,0,0,0,0
+31,101651,Peixoto,286,JUV,4,Meia,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0
+31,102256,Rollheiser,277,SAN,4,Meia,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,2,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,39850,Vagner Mancini,280,RBB,6,Técnico,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,90532,Arthur Melo,284,GRE,4,Meia,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,90588,Caíque,286,JUV,4,Meia,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,3,1,4,1,0,0,0,0,0,0,0,0,0,0
+31,94968,Juninho Capixaba,280,RBB,2,Lateral,2.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,68685,Alan Patrick,285,INT,4,Meia,2.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,1,0,2,1,2,1,0,0,0,0,0,0,0,0,0,0
+31,87742,Neto Moura,2305,MIR,4,Meia,2.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,1,3,1,0,0,0,0,0,0,0,0,0,0,0
+31,112869,Aníbal Moreno,275,PAL,4,Meia,2.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,2,0,0,0,3,1,1,0,0,0,0,0,0,0,0,0,0
+31,90061,Bruno Pacheco,356,FOR,2,Lateral,2.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,102975,Escobar,277,SAN,2,Lateral,2.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,104666,Moisés,356,FOR,5,Atacante,2.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,105990,Santiago Mingo,265,BAH,3,Zagueiro,2.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,1,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0
+31,110715,Andrés Hurtado,280,RBB,2,Lateral,2.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,1,3,2,0,0,0,0,0,0,0,0,0,0,0
+31,116034,Victor Hugo,277,SAN,4,Meia,2.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,105436,Carrascal,262,FLA,4,Meia,2.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,107231,Danilo,263,BOT,4,Meia,2.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,103448,César Lucena,292,SPT,6,Técnico,2.21,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,101597,Ramon,287,VIT,2,Lateral,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,104502,Christian,283,CRU,4,Meia,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,1,0,2,0,2,1,0,0,0,0,0,0,0,0,0,0
+31,109096,Plata,262,FLA,5,Atacante,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,124912,Jonathan Jesus,283,CRU,3,Zagueiro,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,2,1,1,1,0,0,0,0,0,0,0,0,0,0
+31,71701,Santiago Arias,265,BAH,2,Lateral,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,79701,Lucas Silva,283,CRU,4,Meia,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,1,0,1,1,2,0,0,0,0,0,0,0,0,0,0,0
+31,84042,Tiquinho Soares,277,SAN,5,Atacante,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,96340,Lima,266,FLU,4,Meia,2.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,103179,Chris Ramos,263,BOT,5,Atacante,2.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,1,0,0,0,3,2,0,0,0,0,0,0,0,0,0,0,0
+31,96684,Rigoni,276,SAO,5,Atacante,2.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,101733,Pablo Roberto,356,FOR,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,103764,Gabriel Veron,286,JUV,5,Atacante,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,104330,Dudu,287,VIT,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0
+31,104783,Acevedo,265,BAH,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,122485,Barros,267,VAS,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,126216,Derik Lacerda,292,SPT,5,Atacante,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,126471,Barreal,277,SAN,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,68899,Philippe Coutinho,267,VAS,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,2,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0
+31,78478,Willian Arão,277,SAN,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,89637,Thiago Maia,285,INT,4,Meia,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,90307,Juninho,262,FLA,5,Atacante,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,90917,Carlos Eduardo,2305,MIR,5,Atacante,2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,130048,Noriega,284,GRE,4,Meia,1.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,2,1,2,1,0,0,0,0,0,0,0,0,0,0
+31,37656,Fábio,266,FLU,1,Goleiro,1.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,3,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+31,124280,Ricardo Mathias,285,INT,5,Atacante,1.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,105047,João Marcelo,283,CRU,3,Zagueiro,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,105563,Carlos Vinícius,284,GRE,5,Atacante,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0
+31,105842,Edu,287,VIT,3,Zagueiro,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,2,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,107726,Chrystian Barletta,292,SPT,5,Atacante,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,109138,Kike Saverio,287,VIT,5,Atacante,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,113359,Pablo Maia,276,SAO,4,Meia,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,39656,Alan Franco,282,CAM,4,Meia,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,63289,Edenílson,284,GRE,4,Meia,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,91908,Pavón,284,GRE,5,Atacante,1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0
+31,91101,Ronaldo,265,BAH,1,Goleiro,1.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0
+31,95357,Rivera,292,SPT,4,Meia,1.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0
+31,101319,Guga,266,FLU,2,Lateral,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,101573,Pepê,287,VIT,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,105214,Santiago Rodríguez,263,BOT,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,1,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,107873,Bobadilla,276,SAO,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,71709,Cuéllar,284,GRE,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,78855,Thiago Santos,266,FLU,3,Zagueiro,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,81845,Alisson,276,SAO,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,82628,Tinga,356,FOR,2,Lateral,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,87225,Pedro Henrique,280,RBB,3,Zagueiro,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,89274,Andreas Pereira,275,PAL,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,1,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,89846,Cristaldo,284,GRE,4,Meia,1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,39148,Hulk,282,CAM,5,Atacante,1.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,1,1,2,0,0,0,0,0,0,0,0,0,0,0
+31,80061,Saúl,262,FLA,4,Meia,1.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,1,0,1,0,3,0,0,0,0,0,0,0,0,0,0,0
+31,84428,Fernando Sobral,354,CEA,4,Meia,1.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,1,0,1,0,3,0,0,0,0,0,0,0,0,0,0,0
+31,99198,Vegetti,267,VAS,5,Atacante,1.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,99366,Luis Zubeldía,266,FLU,6,Técnico,1.32,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,106681,Léo Pereira,292,SPT,5,Atacante,1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,1,0,0,2,1,0,0,0,0,2,0,0,0,0,0,0
+31,113397,Cristian Olivera,284,GRE,5,Atacante,1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,142867,Robinho Jr.,277,SAN,5,Atacante,1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,80583,Lucas Lima,292,SPT,4,Meia,1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,1,1,2,0,0,0,0,1,0,0,0,0,0,0
+31,97520,Shaylon,2305,MIR,4,Meia,1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,101995,Brítez,356,FOR,3,Zagueiro,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0
+31,105258,Gastón Ávila,356,FOR,3,Zagueiro,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,105584,Lucas Piton,267,VAS,2,Lateral,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,107170,Jeffinho,263,BOT,5,Atacante,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,122487,GB,267,VAS,5,Atacante,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,132071,Serna,266,FLU,5,Atacante,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,82639,Marcelo Hermes,286,JUV,2,Lateral,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,94154,Maycon,264,COR,4,Meia,1.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,103576,Rafael Bilu,286,JUV,5,Atacante,1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,107516,Ênio,286,JUV,5,Atacante,1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,112863,Ramón Sosa,275,PAL,5,Atacante,1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+31,72460,Bernard,282,CAM,4,Meia,1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,100652,Yuri Alberto,264,COR,5,Atacante,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,100695,Fernando,280,RBB,5,Atacante,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,113034,Freytes,266,FLU,3,Zagueiro,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,122396,Ryan,264,COR,4,Meia,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,73781,Guilherme Marques,2305,MIR,4,Meia,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,98384,Negueba,2305,MIR,5,Atacante,0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0
+31,70916,Diogo Barbosa,356,FOR,2,Lateral,0.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,123360,Cauly,265,BAH,4,Meia,0.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0
+31,105647,Maurício,275,PAL,4,Meia,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,2,1,0,0,0,0,1,0,0,0,0,0,0
+31,118775,Lautaro Díaz,277,SAN,5,Atacante,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0,0
+31,72018,Tiago Volpi,284,GRE,1,Goleiro,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+31,86508,Jandrei,286,JUV,1,Goleiro,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+31,92696,Renato Kayzer,287,VIT,5,Atacante,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,0,2,1,0,0,0,0,1,0,0,0,0,0,0
+31,92854,Borré,285,INT,5,Atacante,0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,2,0,0,1,1,1,0,0,0,2,0,0,0,0,0,0
+31,100084,Igor Gomes,282,CAM,4,Meia,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,100987,Nonato,266,FLU,4,Meia,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,105068,Reinier,282,CAM,4,Meia,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,106294,Marcos Antônio,276,SAO,4,Meia,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAO/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,115100,Matheus França,267,VAS,5,Atacante,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,122302,Cristian,2305,MIR,5,Atacante,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,42222,Osvaldo,287,VIT,5,Atacante,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+31,61188,Gilberto,286,JUV,5,Atacante,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,81121,Lucas Mugni,354,CEA,4,Meia,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,84847,Luan Peres,277,SAN,3,Zagueiro,0.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,1,0,0,2,1,1,0,0,0,0,0,0,0,0,0,0
+31,107236,Vanderlan,280,RBB,2,Lateral,0.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,1,1,2,1,0,0,0,0,0,0,0,0,0,0
+31,109573,Martinelli,266,FLU,4,Meia,0.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0
+31,107812,Pierre,356,FOR,4,Meia,0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,1,0,4,0,0,0,0,0,0,0,0,0,0,0
+31,107744,Praxedes,280,RBB,4,Meia,0.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,107989,Carbonero,285,INT,5,Atacante,0.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,1,0,0,0,1,1,1,0,0,0,2,0,0,0,0,0,0
+31,111246,Alix Vinicius,280,RBB,3,Zagueiro,0.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,88087,Ramon Menezes,292,SPT,3,Zagueiro,0.2,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+31,94207,Guilherme,277,SAN,5,Atacante,0.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0
+31,103295,Eric Ramires,280,RBB,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,103672,Gabriel Fuentes,266,FLU,2,Lateral,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,106918,Paulo Baya,354,CEA,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,111760,Fabinho,280,RBB,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,111829,Kayky,265,BAH,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,114802,Vitor Roque,275,PAL,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,117403,Renato Marques,2305,MIR,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,118752,Mateus Carvalho,267,VAS,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,124271,Gustavo Prado,285,INT,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/INT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,133543,Gui Negão,264,COR,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,141995,Dieguinho,264,COR,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,51772,Everton Ribeiro,265,BAH,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,68920,Dudu,282,CAM,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,69138,Pablo,292,SPT,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,78445,Renê,266,FLU,2,Lateral,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,86485,Keno,266,FLU,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,88479,Walace,283,CRU,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,90309,David,267,VAS,5,Atacante,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,93790,Marlon Freitas,263,BOT,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,96342,Charles,264,COR,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,98022,Erick,265,BAH,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,99032,Lourenço,354,CEA,4,Meia,0,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CEA/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+31,124239,Henry Mosquera,280,RBB,5,Atacante,-0.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+31,78117,Everaldo,266,FLU,5,Atacante,-0.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0
+31,105903,José Aldo,2305,MIR,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/MIR/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,106822,Rodrigo Nestor,265,BAH,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,107950,Fausto Vera,282,CAM,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CAM/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,108683,Emiliano Martínez,275,PAL,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,111951,Renzo López,287,VIT,5,Atacante,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,112906,Sforza,286,JUV,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,122660,Japa,283,CRU,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,80196,Yago Pikachu,356,FOR,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,95662,Lucas Kal,292,SPT,4,Meia,-0.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+31,72801,Wilker Ángel,286,JUV,3,Zagueiro,-0.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/JUV/FORMATO.png,0,0,1,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0
+31,88423,Aderlan,292,SPT,2,Lateral,-0.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,1,3,0,0,0,0,0,0,0,0,0,0,0
+31,92171,Arthur Cabral,263,BOT,5,Atacante,-0.4,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,1,3,0,0,0,0,0,0,0,0,0,0,0
+31,116447,Hércules,266,FLU,4,Meia,-0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,94509,Raphael Veiga,275,PAL,4,Meia,-0.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/PAL/FORMATO.png,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0
+31,142279,Nuno Moreira,267,VAS,5,Atacante,-0.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0
+31,90943,Zé Marcos,287,VIT,3,Zagueiro,-0.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VIT/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0
+31,99267,Pochettino,356,FOR,4,Meia,-0.8,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FOR/FORMATO.png,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0
+31,82627,Luiz Araújo,262,FLA,5,Atacante,-0.9,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0
+31,69051,Danilo Fernandes,265,BAH,1,Goleiro,-1,Não,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
+31,107173,Michel Araújo,265,BAH,4,Meia,-1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BAH/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,108133,Isidro Pitta,280,RBB,5,Atacante,-1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/RBB/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,77777,João Schmidt,277,SAN,4,Meia,-1.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SAN/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0
+31,93716,Paulo Henrique,267,VAS,2,Lateral,-1.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/VAS/FORMATO.png,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0
+31,100085,Pedro Augusto,292,SPT,4,Meia,-1.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/SPT/FORMATO.png,0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0
+31,77485,Carrillo,264,COR,4,Meia,-1.6,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/COR/FORMATO.png,0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0
+31,89275,William,283,CRU,2,Lateral,-1.7,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/CRU/FORMATO.png,0,0,0,0,0,0,0,2,1,0,0,0,1,0,0,0,0,0,0
+31,89883,Dodi,284,GRE,4,Meia,-2.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/GRE/FORMATO.png,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0
+31,104693,Newton,263,BOT,4,Meia,-2.5,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/BOT/FORMATO.png,0,0,0,0,0,0,0,5,1,0,0,0,0,0,0,0,0,0,0
+31,103523,Ignácio,266,FLU,3,Zagueiro,-3.1,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLU/FORMATO.png,0,0,0,0,0,0,1,2,0,1,0,0,0,0,0,0,0,0,0
+31,115914,Evertton Araújo,262,FLA,4,Meia,-3.3,Sim,https://s3.glbimg.com/v1/AUTH_58d78b787ec34892b5aaa0c7a146155f/clubes_2025/silhuetas/FLA/FORMATO.png,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0

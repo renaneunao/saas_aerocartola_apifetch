@@ -166,6 +166,38 @@ class DataFetcherService:
         finally:
             close_db_connection(conn)
     
+    def get_rounds_without_scores(self, rodada_atual: int) -> list[int]:
+        """
+        Retorna lista de rodadas anteriores à atual que têm partidas sem placar preenchido.
+        Apenas partidas válidas (valida = true) são consideradas.
+        """
+        conn = get_db_connection()
+        if not conn:
+            return []
+        
+        try:
+            cursor = conn.cursor()
+            
+            # Buscar rodadas anteriores à atual que têm partidas válidas sem placar
+            cursor.execute("""
+                SELECT DISTINCT rodada_id
+                FROM acf_partidas
+                WHERE rodada_id < %s
+                    AND valida = true
+                    AND (placar_oficial_mandante IS NULL OR placar_oficial_visitante IS NULL)
+                ORDER BY rodada_id DESC
+            """, (rodada_atual,))
+            
+            rounds = [row[0] for row in cursor.fetchall()]
+            cursor.close()
+            return rounds
+            
+        except Exception as e:
+            logger.error(f"Erro ao verificar rodadas sem placar: {e}")
+            return []
+        finally:
+            close_db_connection(conn)
+    
     def get_missing_rounds(self, table_name: str, rodada_atual: int, max_rounds_to_check: int = None) -> list[int]:
         """
         Retorna lista de rodadas faltantes para uma tabela.
@@ -397,14 +429,10 @@ class DataFetcherService:
     def fetch_and_store_partidas_per_round(self, rodada: int) -> bool:
         """
         Busca e armazena partidas de uma rodada específica
-        Lógica: Atualiza apenas uma vez por rodada
+        Lógica: Sempre atualiza (placares mudam durante os jogos)
+        O ON CONFLICT DO UPDATE garante que apenas dados alterados sejam atualizados
         """
         try:
-            # Verificar se já foi atualizado nesta rodada
-            if self.was_updated_in_round('partidas', rodada):
-                logger.info(f"Partidas da rodada {rodada} já foram atualizadas, pulando...")
-                return True
-            
             logger.info(f"Buscando partidas da rodada {rodada}...")
             partidas_data = fetch_partidas_data(rodada)
             
@@ -419,7 +447,7 @@ class DataFetcherService:
             
             try:
                 update_partidas(conn, partidas_data, rodada)
-                logger.info(f"Partidas da rodada {rodada} armazenadas com sucesso")
+                logger.info(f"Partidas da rodada {rodada} atualizadas com sucesso")
                 return True
             finally:
                 close_db_connection(conn)
@@ -528,7 +556,7 @@ class DataFetcherService:
                 return False
             
             try:
-                update_destaques(conn, destaques_data)
+                update_destaques(conn, destaques_data, rodada)
                 logger.info(f"Destaques atualizados: {len(destaques_data) if isinstance(destaques_data, list) else 'N/A'} itens")
                 return True
             finally:
@@ -599,18 +627,35 @@ class DataFetcherService:
             if rodada_atual:
                 logger.info(f"Rodada atual detectada: {rodada_atual}")
                 
-                # PARTIDAS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual, incluindo a atual)
-                logger.info("Verificando rodadas de partidas faltantes...")
-                missing_partidas = self.get_missing_rounds('partidas', rodada_atual)
-                if missing_partidas:
-                    logger.info(f"Rodadas de partidas faltantes encontradas: {missing_partidas}")
-                    for rodada_missing in missing_partidas:
-                        logger.info(f"Buscando partidas da rodada {rodada_missing}...")
-                        self.fetch_and_store_partidas_per_round(rodada_missing)
-                    results['partidas'] = True
-                else:
-                    logger.info(f"Todas as partidas das rodadas (1 até {rodada_atual}) já estão atualizadas")
-                    results['partidas'] = True
+                # PARTIDAS: Atualizar rodada atual sempre (placares mudam durante os jogos)
+                # E rodadas anteriores que têm partidas sem placar
+                logger.info("Atualizando partidas da rodada atual e verificando rodadas anteriores sem placar...")
+                
+                # Sempre atualizar rodada atual (placares podem mudar)
+                logger.info(f"Atualizando partidas da rodada atual ({rodada_atual})...")
+                self.fetch_and_store_partidas_per_round(rodada_atual)
+                
+                # Verificar rodadas anteriores que têm partidas sem placar
+                if rodada_atual > 1:
+                    rounds_sem_placar = self.get_rounds_without_scores(rodada_atual)
+                    if rounds_sem_placar:
+                        logger.info(f"Rodadas anteriores com partidas sem placar encontradas: {rounds_sem_placar}")
+                        for rodada_sem_placar in rounds_sem_placar:
+                            logger.info(f"Atualizando partidas da rodada {rodada_sem_placar} para buscar placares...")
+                            self.fetch_and_store_partidas_per_round(rodada_sem_placar)
+                    else:
+                        logger.info("Todas as rodadas anteriores têm placares preenchidos")
+                
+                # Verificar se há rodadas muito antigas faltando (sem partidas cadastradas)
+                if rodada_atual > 1:
+                    missing_partidas = self.get_missing_rounds('partidas', rodada_atual - 1)
+                    if missing_partidas:
+                        logger.info(f"Rodadas de partidas anteriores faltantes (sem cadastro): {missing_partidas}")
+                        for rodada_missing in missing_partidas:
+                            logger.info(f"Buscando partidas da rodada {rodada_missing}...")
+                            self.fetch_and_store_partidas_per_round(rodada_missing)
+                
+                results['partidas'] = True
                 
                 # Destaques (atualizados a cada 5 minutos)
                 self.fetch_and_store_destaques(rodada_atual)

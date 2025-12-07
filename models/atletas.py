@@ -41,6 +41,32 @@ def update_atletas(conn, atletas_data, rodada_atual):
             foto = EXCLUDED.foto
     '''
     execute_values(cursor, insert_sql, rows, page_size=1000)
+    
+    # Também salvar no histórico (não sobrescreve, apenas adiciona)
+    historico_sql = '''
+        INSERT INTO acf_atletas_historico (
+            atleta_id, rodada_id, clube_id, posicao_id, status_id, pontos_num,
+            media_num, variacao_num, preco_num, jogos_num, entrou_em_campo,
+            slug, apelido, nome, foto
+        )
+        VALUES %s
+        ON CONFLICT (atleta_id, rodada_id) DO UPDATE SET
+            clube_id = EXCLUDED.clube_id,
+            posicao_id = EXCLUDED.posicao_id,
+            status_id = EXCLUDED.status_id,
+            pontos_num = EXCLUDED.pontos_num,
+            media_num = EXCLUDED.media_num,
+            variacao_num = EXCLUDED.variacao_num,
+            preco_num = EXCLUDED.preco_num,
+            jogos_num = EXCLUDED.jogos_num,
+            entrou_em_campo = EXCLUDED.entrou_em_campo,
+            slug = EXCLUDED.slug,
+            apelido = EXCLUDED.apelido,
+            nome = EXCLUDED.nome,
+            foto = EXCLUDED.foto
+    '''
+    execute_values(cursor, historico_sql, rows, page_size=1000)
+    
     conn.commit()
     t1 = time.time()
-    print(f"Atletas: upsert {len(rows)} registros em {t1 - t0:.2f}s")
+    print(f"Atletas: upsert {len(rows)} registros em {t1 - t0:.2f}s (tabela atual + histórico)")
