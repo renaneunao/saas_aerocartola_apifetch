@@ -148,6 +148,40 @@ class DataFetcherService:
             return f'acf_{table_name}'
         return table_name
     
+    def _check_round_exists(self, table_name: str, rodada: int) -> bool:
+        """Verifica se uma rodada específica existe no banco de dados"""
+        conn = get_db_connection()
+        if not conn:
+            return False
+        
+        try:
+            cursor = conn.cursor()
+            actual_table_name = self._get_table_name(table_name)
+            
+            # Para pontuados, verificar também pela temporada atual
+            if table_name == 'pontuados':
+                from utils.utilidades import get_temporada_atual
+                temporada = get_temporada_atual()
+                cursor.execute(
+                    f"SELECT COUNT(*) FROM {actual_table_name} WHERE rodada_id = %s AND temporada = %s",
+                    (rodada, temporada)
+                )
+            else:
+                cursor.execute(
+                    f"SELECT COUNT(*) FROM {actual_table_name} WHERE rodada_id = %s",
+                    (rodada,)
+                )
+            
+            count = cursor.fetchone()[0]
+            cursor.close()
+            return count > 0
+            
+        except Exception as e:
+            logger.error(f"Erro ao verificar se rodada {rodada} existe em {table_name}: {e}")
+            return False
+        finally:
+            close_db_connection(conn)
+    
     def table_has_data(self, table_name: str) -> bool:
         """Verifica se uma tabela tem dados"""
         conn = get_db_connection()
@@ -204,6 +238,7 @@ class DataFetcherService:
         
         Para partidas: verifica todas as rodadas de 1 até rodada_atual (incluindo a atual)
         Para pontuados: verifica todas as rodadas de 1 até rodada_atual - 1
+        EXCEÇÃO: Se rodada_atual for 38 (última do campeonato), inclui também a rodada 38
         """
         conn = get_db_connection()
         if not conn:
@@ -215,8 +250,13 @@ class DataFetcherService:
             # Determinar range de rodadas a verificar
             if table_name == 'pontuados':
                 # Pontuados: até rodada anterior (não inclui a atual, pois ainda não aconteceu)
+                # EXCEÇÃO: Se rodada atual for 38 (última do campeonato), incluir também
                 min_round = 1
-                max_round = rodada_atual - 1 if rodada_atual > 1 else 0
+                if rodada_atual == 38:
+                    # Última rodada do campeonato, incluir também
+                    max_round = 38
+                else:
+                    max_round = rodada_atual - 1 if rodada_atual > 1 else 0
             elif table_name == 'partidas':
                 # Partidas: inclui a rodada atual (para ter os dados dos jogos que vão acontecer)
                 min_round = 1
@@ -234,8 +274,14 @@ class DataFetcherService:
                 min_round = max(min_round, max_round - max_rounds_to_check + 1)
             
             # Buscar todas as rodadas que existem no banco
+            # Para pontuados, verificar também pela temporada atual (2025)
             actual_table_name = self._get_table_name(table_name)
-            cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s", (min_round, max_round))
+            if table_name == 'pontuados':
+                from utils.utilidades import get_temporada_atual
+                temporada = get_temporada_atual()
+                cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s AND temporada = %s", (min_round, max_round, temporada))
+            else:
+                cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s", (min_round, max_round))
             existing_rounds = {row[0] for row in cursor.fetchall()}
             
             # Encontrar rodadas faltantes
@@ -660,10 +706,20 @@ class DataFetcherService:
                 # Destaques (atualizados a cada 5 minutos)
                 self.fetch_and_store_destaques(rodada_atual)
                 
-                # PONTUADOS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1)
+                # PONTUADOS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1, ou até 38 se for a última)
+                # REGRA ESPECIAL: Sempre verificar rodada 38 (última do campeonato), mesmo que não seja a atual
                 if rodada_atual > 1:
                     logger.info("Verificando rodadas de pontuados faltantes...")
                     missing_pontuados = self.get_missing_rounds('pontuados', rodada_atual)
+                    
+                    # FORÇA ESPECIAL: Sempre verificar se rodada 38 existe (última do campeonato)
+                    # Mesmo que não seja a rodada atual, pode ter sido finalizada
+                    if 38 not in missing_pontuados:
+                        rodada_38_existe = self._check_round_exists('pontuados', 38)
+                        if not rodada_38_existe:
+                            logger.info("Rodada 38 não encontrada. Forçando busca da última rodada do campeonato...")
+                            missing_pontuados.append(38)
+                    
                     if missing_pontuados:
                         logger.info(f"Rodadas de pontuados faltantes encontradas: {missing_pontuados}")
                         for rodada_missing in missing_pontuados:
@@ -671,11 +727,17 @@ class DataFetcherService:
                             self.fetch_and_store_pontuados(rodada_missing)
                         results['pontuados'] = True
                     else:
-                        logger.info(f"Todos os pontuados das rodadas (1 até {rodada_atual - 1}) já estão atualizados")
+                        max_round_msg = 38 if rodada_atual == 38 else rodada_atual - 1
+                        logger.info(f"Todos os pontuados das rodadas (1 até {max_round_msg}) já estão atualizados")
                         results['pontuados'] = True
                 else:
-                    logger.info("Rodada atual é 1, não há rodada anterior para buscar pontuados")
-                    results['pontuados'] = True  # Considera sucesso pois não há o que buscar
+                    # Mesmo se rodada atual for 1, verificar se rodada 38 existe (pode ter sido finalizado o campeonato)
+                    logger.info("Rodada atual é 1. Verificando se rodada 38 (final do campeonato) precisa ser buscada...")
+                    rodada_38_existe = self._check_round_exists('pontuados', 38)
+                    if not rodada_38_existe:
+                        logger.info("Rodada 38 não encontrada. Forçando busca da última rodada do campeonato...")
+                        self.fetch_and_store_pontuados(38)
+                    results['pontuados'] = True
             
             elapsed_time = time.time() - start_time
             brasilia_finish = get_brasilia_datetime()

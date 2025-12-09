@@ -1,28 +1,31 @@
 def update_atletas(conn, atletas_data, rodada_atual):
     import time
     from psycopg2.extras import execute_values
+    from utils.utilidades import get_temporada_atual
     cursor = conn.cursor()
     t0 = time.time()
+    temporada = get_temporada_atual()
+    
     # Sincroniza: remove atletas que não existem mais na API e upserta os atuais
     ids_novos = [a['atleta_id'] for a in atletas_data] if atletas_data else []
 
     if not ids_novos:
-        cursor.execute('DELETE FROM acf_atletas')
+        cursor.execute('DELETE FROM acf_atletas WHERE temporada = %s', (temporada,))
     else:
         # Delete eficiente usando ANY(array)
-        cursor.execute("DELETE FROM acf_atletas WHERE NOT (atleta_id = ANY(%s))", (ids_novos,))
+        cursor.execute("DELETE FROM acf_atletas WHERE temporada = %s AND NOT (atleta_id = ANY(%s))", (temporada, ids_novos))
 
     # Upsert em lote com execute_values (muito mais rápido)
     rows = [(
         a['atleta_id'], rodada_atual, a['clube_id'], a['posicao_id'], a['status_id'], a['pontos_num'],
         a['media_num'], a['variacao_num'], a['preco_num'], a['jogos_num'], a['entrou_em_campo'],
-        a['slug'], a['apelido'], a['nome'], a['foto']
+        a['slug'], a['apelido'], a['nome'], a['foto'], temporada
     ) for a in atletas_data]
 
     insert_sql = '''
         INSERT INTO acf_atletas (atleta_id, rodada_id, clube_id, posicao_id, status_id, pontos_num,
                              media_num, variacao_num, preco_num, jogos_num, entrou_em_campo,
-                             slug, apelido, nome, foto)
+                             slug, apelido, nome, foto, temporada)
         VALUES %s
         ON CONFLICT (atleta_id) DO UPDATE SET
             rodada_id = EXCLUDED.rodada_id,
@@ -38,16 +41,23 @@ def update_atletas(conn, atletas_data, rodada_atual):
             slug = EXCLUDED.slug,
             apelido = EXCLUDED.apelido,
             nome = EXCLUDED.nome,
-            foto = EXCLUDED.foto
+            foto = EXCLUDED.foto,
+            temporada = EXCLUDED.temporada
     '''
     execute_values(cursor, insert_sql, rows, page_size=1000)
     
     # Também salvar no histórico (não sobrescreve, apenas adiciona)
+    historico_rows = [(
+        a['atleta_id'], rodada_atual, a['clube_id'], a['posicao_id'], a['status_id'], a['pontos_num'],
+        a['media_num'], a['variacao_num'], a['preco_num'], a['jogos_num'], a['entrou_em_campo'],
+        a['slug'], a['apelido'], a['nome'], a['foto'], temporada
+    ) for a in atletas_data]
+    
     historico_sql = '''
         INSERT INTO acf_atletas_historico (
             atleta_id, rodada_id, clube_id, posicao_id, status_id, pontos_num,
             media_num, variacao_num, preco_num, jogos_num, entrou_em_campo,
-            slug, apelido, nome, foto
+            slug, apelido, nome, foto, temporada
         )
         VALUES %s
         ON CONFLICT (atleta_id, rodada_id) DO UPDATE SET
@@ -63,10 +73,11 @@ def update_atletas(conn, atletas_data, rodada_atual):
             slug = EXCLUDED.slug,
             apelido = EXCLUDED.apelido,
             nome = EXCLUDED.nome,
-            foto = EXCLUDED.foto
+            foto = EXCLUDED.foto,
+            temporada = EXCLUDED.temporada
     '''
-    execute_values(cursor, historico_sql, rows, page_size=1000)
+    execute_values(cursor, historico_sql, historico_rows, page_size=1000)
     
     conn.commit()
     t1 = time.time()
-    print(f"Atletas: upsert {len(rows)} registros em {t1 - t0:.2f}s (tabela atual + histórico)")
+    print(f"Atletas: upsert {len(rows)} registros em {t1 - t0:.2f}s (tabela atual + histórico), temporada {temporada}")

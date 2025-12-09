@@ -1,5 +1,47 @@
 DEBUG_MODE = True
 
+# Cache para temporada (evita múltiplas requisições)
+_TEMPORADA_CACHE = None
+_TEMPORADA_CACHE_TIMESTAMP = None
+_CACHE_DURATION = 3600  # Cache por 1 hora
+
+def get_temporada_atual() -> int:
+    """
+    Retorna a temporada atual buscando da API de status do Cartola.
+    Usa cache de 1 hora para evitar múltiplas requisições.
+    Fallback para ano atual caso a API falhe.
+    """
+    import time
+    from datetime import datetime
+    
+    global _TEMPORADA_CACHE, _TEMPORADA_CACHE_TIMESTAMP
+    
+    # Verificar cache
+    current_time = time.time()
+    if _TEMPORADA_CACHE is not None and _TEMPORADA_CACHE_TIMESTAMP is not None:
+        if current_time - _TEMPORADA_CACHE_TIMESTAMP < _CACHE_DURATION:
+            return _TEMPORADA_CACHE
+    
+    # Buscar da API
+    try:
+        from api_cartola import fetch_status_data
+        status_data = fetch_status_data()
+        
+        if status_data and 'temporada' in status_data:
+            temporada = int(status_data['temporada'])
+            # Atualizar cache
+            _TEMPORADA_CACHE = temporada
+            _TEMPORADA_CACHE_TIMESTAMP = current_time
+            return temporada
+    except Exception as e:
+        printdbg(f"Erro ao buscar temporada da API: {e}. Usando fallback (ano atual)")
+    
+    # Fallback: usar ano atual
+    temporada_fallback = datetime.now().year
+    _TEMPORADA_CACHE = temporada_fallback
+    _TEMPORADA_CACHE_TIMESTAMP = current_time
+    return temporada_fallback
+
 def printdbg(*args):
     if DEBUG_MODE:
         print(" ".join(map(str, args)))

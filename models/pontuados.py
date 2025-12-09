@@ -1,13 +1,16 @@
 def update_pontuados(conn, pontuados_data, rodada):
     from psycopg2.extras import execute_values
     import time
+    from utils.utilidades import get_temporada_atual
     t0 = time.time()
     cursor = conn.cursor()
+    temporada = get_temporada_atual()
+    
     # Se já existem pontuações para a rodada, pula
-    cursor.execute('SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s', (rodada,))
+    cursor.execute('SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s AND temporada = %s', (rodada, temporada))
     exists_count = cursor.fetchone()[0]
     if exists_count and exists_count > 0:
-        print(f"Rodada {rodada} já existente em 'pontuados'. Pulando atualização.")
+        print(f"Rodada {rodada} já existente em 'pontuados' (temporada {temporada}). Pulando atualização.")
         return
 
     rows = []
@@ -24,7 +27,8 @@ def update_pontuados(conn, pontuados_data, rodada):
             atleta.get('foto', ''),
             scout.get('A', 0), scout.get('CA', 0), scout.get('CV', 0), scout.get('DE', 0), scout.get('DS', 0),
             scout.get('FC', 0), scout.get('FD', 0), scout.get('FF', 0), scout.get('FS', 0), scout.get('G', 0),
-            scout.get('GS', 0), scout.get('I', 0), scout.get('SG', 0)
+            scout.get('GS', 0), scout.get('I', 0), scout.get('SG', 0),
+            temporada
         )
         rows.append(row)
 
@@ -36,7 +40,7 @@ def update_pontuados(conn, pontuados_data, rodada):
         INSERT INTO acf_pontuados (
             atleta_id, rodada_id, clube_id, posicao_id, pontuacao, entrou_em_campo, apelido, foto,
             scout_a, scout_ca, scout_cv, scout_de, scout_ds, scout_fc, scout_fd, scout_ff, scout_fs,
-            scout_g, scout_gs, scout_i, scout_sg
+            scout_g, scout_gs, scout_i, scout_sg, temporada
         ) VALUES %s
         ON CONFLICT (atleta_id, rodada_id) DO UPDATE SET
             clube_id = EXCLUDED.clube_id,
@@ -57,8 +61,9 @@ def update_pontuados(conn, pontuados_data, rodada):
             scout_g = EXCLUDED.scout_g,
             scout_gs = EXCLUDED.scout_gs,
             scout_i = EXCLUDED.scout_i,
-            scout_sg = EXCLUDED.scout_sg
+            scout_sg = EXCLUDED.scout_sg,
+            temporada = EXCLUDED.temporada
     '''
     execute_values(cursor, insert_sql, rows, page_size=1000)
     conn.commit()
-    print(f"Pontuados: rodada {rodada}, inseridos/atualizados {len(rows)} em {time.time()-t0:.2f}s")
+    print(f"Pontuados: rodada {rodada}, temporada {temporada}, inseridos/atualizados {len(rows)} em {time.time()-t0:.2f}s")

@@ -104,10 +104,16 @@ def update_destaques(conn, destaques_data, rodada_atual=None):
             
             if historico_rows:
                 from psycopg2.extras import execute_values
+                from utils.utilidades import get_temporada_atual
+                temporada = get_temporada_atual()
+                
+                # Adicionar temporada em cada linha
+                historico_rows_com_temporada = [row + (temporada,) for row in historico_rows]
+                
                 historico_sql = '''
                     INSERT INTO acf_destaques_historico (
                         atleta_id, rodada_id, escalacoes, preco_editorial,
-                        posicao, posicao_abreviacao, clube_id, clube, apelido
+                        posicao, posicao_abreviacao, clube_id, clube, apelido, temporada
                     )
                     VALUES %s
                     ON CONFLICT (atleta_id, rodada_id) DO UPDATE SET
@@ -117,11 +123,12 @@ def update_destaques(conn, destaques_data, rodada_atual=None):
                         posicao_abreviacao = EXCLUDED.posicao_abreviacao,
                         clube_id = EXCLUDED.clube_id,
                         clube = EXCLUDED.clube,
-                        apelido = EXCLUDED.apelido
+                        apelido = EXCLUDED.apelido,
+                        temporada = EXCLUDED.temporada
                 '''
-                execute_values(cursor, historico_sql, historico_rows, page_size=1000)
+                execute_values(cursor, historico_sql, historico_rows_com_temporada, page_size=1000)
                 conn.commit()
-                printdbg(f"Destaques histórico: {len(historico_rows)} registros salvos para rodada {rodada_atual}")
+                printdbg(f"Destaques histórico: {len(historico_rows)} registros salvos para rodada {rodada_atual} (temporada {temporada})")
         except Exception as e:
             printdbg(f"Erro ao salvar destaques no histórico: {e}")
             conn.rollback()

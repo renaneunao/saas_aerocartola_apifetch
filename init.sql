@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS acf_atletas (
     apelido TEXT,
     nome TEXT,
     foto TEXT,
+    temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id),
     FOREIGN KEY (status_id) REFERENCES acf_status(id)
@@ -79,6 +80,7 @@ CREATE TABLE IF NOT EXISTS acf_partidas (
     partida_data TEXT,
     valida BOOLEAN,
     timestamp INTEGER,
+    temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     FOREIGN KEY (clube_casa_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (clube_visitante_id) REFERENCES acf_clubes(id)
 );
@@ -105,6 +107,7 @@ CREATE TABLE IF NOT EXISTS acf_pontuados (
     scout_gs INTEGER DEFAULT 0, -- Gol Sofrido
     scout_i INTEGER DEFAULT 0,  -- Impedimento
     scout_sg INTEGER DEFAULT 0, -- Sem Gol
+    temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     PRIMARY KEY (atleta_id, rodada_id),
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id)
@@ -147,6 +150,7 @@ CREATE TABLE IF NOT EXISTS acf_atletas_historico (
     apelido TEXT,
     nome TEXT,
     foto TEXT,
+    temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     created_at TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY (atleta_id, rodada_id),
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
@@ -167,6 +171,7 @@ CREATE TABLE IF NOT EXISTS acf_destaques_historico (
     clube_id INTEGER,
     clube TEXT,
     apelido TEXT,
+    temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     created_at TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY (atleta_id, rodada_id),
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id)
