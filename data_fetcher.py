@@ -274,11 +274,16 @@ class DataFetcherService:
                 min_round = max(min_round, max_round - max_rounds_to_check + 1)
             
             # Buscar todas as rodadas que existem no banco
-            # Para pontuados, verificar também pela temporada atual (2025)
+            # Verificar também pela temporada atual para TODAS as tabelas com suporte a temporada
             actual_table_name = self._get_table_name(table_name)
-            if table_name == 'pontuados':
-                from utils.utilidades import get_temporada_atual
-                temporada = get_temporada_atual()
+            
+            from utils.utilidades import get_temporada_atual
+            temporada = get_temporada_atual()
+            
+            # Tabelas que têm coluna temporada
+            tables_with_season = ['pontuados', 'partidas', 'atletas_historico', 'destaques_historico']
+            
+            if table_name in tables_with_season or table_name == 'partidas':
                 cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s AND temporada = %s", (min_round, max_round, temporada))
             else:
                 cursor.execute(f"SELECT DISTINCT rodada_id FROM {actual_table_name} WHERE rodada_id BETWEEN %s AND %s", (min_round, max_round))
@@ -309,16 +314,20 @@ class DataFetcherService:
         try:
             cursor = conn.cursor()
             
-            # Para partidas, verificar se já existe partida para essa rodada
+            # Importar utilitário de temporada
+            from utils.utilidades import get_temporada_atual
+            temporada = get_temporada_atual()
+            
+            # Para partidas, verificar se já existe partida para essa rodada NA TEMPORADA ATUAL
             if table_name == 'partidas':
-                cursor.execute("SELECT COUNT(*) FROM acf_partidas WHERE rodada_id = %s", (rodada,))
+                cursor.execute("SELECT COUNT(*) FROM acf_partidas WHERE rodada_id = %s AND temporada = %s", (rodada, temporada))
                 count = cursor.fetchone()[0]
                 cursor.close()
                 return count > 0
             
-            # Para pontuados, verificar se já existe pontuados para essa rodada
+            # Para pontuados, verificar se já existe pontuados para essa rodada NA TEMPORADA ATUAL
             if table_name == 'pontuados':
-                cursor.execute("SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s", (rodada,))
+                cursor.execute("SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s AND temporada = %s", (rodada, temporada))
                 count = cursor.fetchone()[0]
                 cursor.close()
                 return count > 0
