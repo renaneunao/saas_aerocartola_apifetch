@@ -777,6 +777,25 @@ class DataFetcherService:
         except Exception as e:
             logger.error(f"Erro crítico no ciclo de fetch: {e}", exc_info=True)
             self.last_fetch_status = 'error'
+        finally:
+            if self.scheduler and self.running:
+                from datetime import timedelta
+                proxima_execucao = datetime.now(BRASILIA_TZ) + timedelta(minutes=self.interval_minutes)
+                
+                try:
+                    self.scheduler.remove_job('fetch_cycle')
+                except:
+                    pass
+                
+                self.scheduler.add_job(
+                    self.run_fetch_cycle,
+                    trigger='date',
+                    run_date=proxima_execucao,
+                    id='fetch_cycle',
+                    name='Ciclo de Fetch de Dados',
+                    replace_existing=True
+                )
+                logger.info(f"Próxima execução agendada para: {proxima_execucao.strftime('%Y-%m-%d %H:%M:%S')}")
     
     def start(self, interval_minutes: int = 5):
         """Inicia o serviço com agendamento periódico"""
@@ -784,23 +803,17 @@ class DataFetcherService:
             logger.warning("Serviço já está em execução")
             return
         
+        self.interval_minutes = interval_minutes
         logger.info(f"Iniciando Data Fetcher Service (intervalo: {interval_minutes} minutos)")
         
-        # Executar primeiro ciclo imediatamente
-        self.run_fetch_cycle()
-        
-        # Configurar agendamento
+        # Configurar agendamento PRIMEIRO
         self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(
-            self.run_fetch_cycle,
-            trigger=IntervalTrigger(minutes=interval_minutes),
-            id='fetch_cycle',
-            name='Ciclo de Fetch de Dados',
-            replace_existing=True
-        )
-        
         self.scheduler.start()
         self.running = True
+        
+        # Executar primeiro ciclo imediatamente (ele vai agendar o próximo)
+        self.run_fetch_cycle()
+        
         logger.info("[OK] Data Fetcher Service iniciado com sucesso")
     
     def stop(self):
