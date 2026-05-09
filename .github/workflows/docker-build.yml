@@ -27,13 +27,17 @@ jobs:
         push: true
         tags: renaneunao/cartola-aero-data-fetcher:latest
     
-    - name: Update Docker Hub description
-      run: |
-        curl -X PATCH \
-          -H "Authorization: JWT ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"full_description": "Data Fetcher Service - Container 1: Coleta dados da API do Cartola FC periodicamente"}' \
-          "https://hub.docker.com/v2/repositories/renaneunao/cartola-aero-data-fetcher/"
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /root/apps/cartola-aero/cartola-aero-data-fetcher
+          docker compose pull
+          docker compose up -d
+          echo "Data Fetcher deployed successfully!"
 
     - name: Verify deployment
       run: echo "Docker image built and pushed successfully to Docker Hub!"
