@@ -36,6 +36,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /root/apps/cartola-aero/cartola-aero-data-fetcher
+          docker compose down --remove-orphans || true
           docker compose pull
           docker compose up -d
           echo "Data Fetcher deployed successfully!"
