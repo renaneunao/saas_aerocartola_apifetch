@@ -4,7 +4,7 @@ Serviço responsável por coletar dados da API do Cartola FC periodicamente
 e armazenar no PostgreSQL.
 
 Funcionalidades:
-- Fetch periódico a cada 5 minutos
+- Fetch periódico a cada 30 minutos normalmente e 5 minutos no dia de fechamento
 - Retry logic para falhas de API
 - Rate limiting
 - Integração com APIs do Cartola FC (atletas, clubes, partidas, destaques, etc.)
@@ -57,6 +57,12 @@ logger = logging.getLogger(__name__)
 
 # Timezone de Brasília
 BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
+
+# O mercado precisa de mais frequência no dia do fechamento. O intervalo é
+# decidido novamente ao final de cada ciclo usando o campo ``fechamento`` do
+# endpoint de status do mercado.
+NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
+CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
 
 def get_brasilia_datetime() -> str:
     """Retorna a data e hora atual no horário de Brasília formatada"""
@@ -130,6 +136,7 @@ class DataFetcherService:
         self.running = False
         self.last_fetch_time = None
         self.last_fetch_status = None
+        self.last_market_status = None
         # Inicializar banco de dados (criar tabelas se não existirem)
         logger.info("Inicializando banco de dados...")
         if initialize_database():
@@ -332,7 +339,7 @@ class DataFetcherService:
                 cursor.close()
                 return count > 0
             
-            # Destaques não são mais verificados aqui - são atualizados a cada 5 minutos
+            # Destaques não são mais verificados aqui - seguem o ciclo dinâmico
             
             cursor.close()
             return False
@@ -358,6 +365,40 @@ class DataFetcherService:
         except Exception as e:
             logger.error(f"Erro ao obter rodada atual: {e}")
             return None
+
+    @staticmethod
+    def _is_closing_day(status_data: Optional[Dict[str, Any]]) -> bool:
+        """Retorna True quando hoje é o dia informado para fechamento do mercado."""
+        if not isinstance(status_data, dict):
+            return False
+
+        fechamento = status_data.get('fechamento')
+        if not isinstance(fechamento, dict):
+            return False
+
+        try:
+            fechamento_timestamp = fechamento.get('timestamp')
+            if fechamento_timestamp:
+                fechamento_date = datetime.fromtimestamp(
+                    int(fechamento_timestamp), BRASILIA_TZ
+                ).date()
+            else:
+                fechamento_date = datetime(
+                    int(fechamento['ano']),
+                    int(fechamento['mes']),
+                    int(fechamento['dia'])
+                ).date()
+
+            return datetime.now(BRASILIA_TZ).date() == fechamento_date
+        except (KeyError, TypeError, ValueError, OverflowError) as exc:
+            logger.warning(f"Não foi possível interpretar a data de fechamento: {exc}")
+            return False
+
+    def _get_next_interval_minutes(self) -> int:
+        """Seleciona o intervalo normal ou o intervalo do dia de fechamento."""
+        if self._is_closing_day(self.last_market_status):
+            return CLOSING_DAY_INTERVAL_MINUTES
+        return NORMAL_INTERVAL_MINUTES
     
     @retry_on_failure(max_retries=3, delay=2.0)
     @rate_limiter
@@ -367,7 +408,7 @@ class DataFetcherService:
         
         Lógica de atualização:
         - clubes, posicoes, status: Só atualiza se não tiverem dados
-        - atletas: Sempre atualiza (a cada 5 minutos)
+        - atletas: Sempre atualiza (a cada ciclo configurado)
         """
         try:
             logger.info("Iniciando fetch de dados do mercado Cartola...")
@@ -587,7 +628,7 @@ class DataFetcherService:
     def fetch_and_store_destaques(self, rodada: int = None) -> bool:
         """
         Busca e armazena destaques do mercado
-        Lógica: Atualiza a cada 5 minutos (sempre)
+        Lógica: Atualiza a cada ciclo configurado
         """
         try:
             logger.info("Buscando destaques do mercado...")
@@ -652,6 +693,8 @@ class DataFetcherService:
             # 0.1 Verificar status do mercado ANTES de atualizar qualquer tabela
             status_data = fetch_status_data()
             if status_data:
+                self.last_market_status = status_data
+            if status_data:
                 status_mercado = status_data.get('status_mercado')
                 logger.info(f"Status do mercado: {status_mercado}")
                 
@@ -712,7 +755,7 @@ class DataFetcherService:
                 
                 results['partidas'] = True
                 
-                # Destaques (atualizados a cada 5 minutos)
+                # Destaques (atualizados a cada ciclo configurado)
                 self.fetch_and_store_destaques(rodada_atual)
                 
                 # PONTUADOS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1, ou até 38 se for a última)
@@ -780,7 +823,8 @@ class DataFetcherService:
         finally:
             if self.scheduler and self.running:
                 from datetime import timedelta
-                proxima_execucao = datetime.now(BRASILIA_TZ) + timedelta(minutes=self.interval_minutes)
+                interval_minutes = self._get_next_interval_minutes()
+                proxima_execucao = datetime.now(BRASILIA_TZ) + timedelta(minutes=interval_minutes)
                 
                 try:
                     self.scheduler.remove_job('fetch_cycle')
@@ -793,18 +837,35 @@ class DataFetcherService:
                     run_date=proxima_execucao,
                     id='fetch_cycle',
                     name='Ciclo de Fetch de Dados',
-                    replace_existing=True
+                    replace_existing=True,
+                    # Um atraso momentâneo do scheduler não pode derrubar o
+                    # serviço permanentemente. O padrão do APScheduler é 1s.
+                    misfire_grace_time=None,
+                    coalesce=True,
+                    max_instances=1
                 )
-                logger.info(f"Próxima execução agendada para: {proxima_execucao.strftime('%Y-%m-%d %H:%M:%S')}")
+                dia_fechamento = self._is_closing_day(self.last_market_status)
+                logger.info(
+                    f"Próxima execução agendada para: "
+                    f"{proxima_execucao.strftime('%Y-%m-%d %H:%M:%S')} "
+                    f"(intervalo: {interval_minutes} min, "
+                    f"dia_fechamento: {dia_fechamento})"
+                )
     
-    def start(self, interval_minutes: int = 5):
+    def start(self, interval_minutes: Optional[int] = None):
         """Inicia o serviço com agendamento periódico"""
         if self.running:
             logger.warning("Serviço já está em execução")
             return
         
+        # Mantém o argumento por compatibilidade, mas a frequência efetiva é
+        # dinâmica e determinada pelo dia de fechamento.
         self.interval_minutes = interval_minutes
-        logger.info(f"Iniciando Data Fetcher Service (intervalo: {interval_minutes} minutos)")
+        logger.info(
+            "Iniciando Data Fetcher Service "
+            f"(intervalo normal: {NORMAL_INTERVAL_MINUTES} min, "
+            f"dia de fechamento: {CLOSING_DAY_INTERVAL_MINUTES} min)"
+        )
         
         # Configurar agendamento PRIMEIRO
         self.scheduler = BackgroundScheduler()
@@ -857,10 +918,8 @@ def main():
     signal.signal(signal.SIGTERM, signal_handler)
     
     try:
-        # Iniciar serviço (5 minutos de intervalo)
-        # Obter intervalo de variável de ambiente ou usar padrão
-        interval_minutes = int(os.getenv('FETCH_INTERVAL_MINUTES', 5))
-        fetcher_service.start(interval_minutes=interval_minutes)
+        # O intervalo é escolhido dinamicamente a partir do fechamento do mercado.
+        fetcher_service.start()
         
         # Manter o processo vivo
         logger.info("Serviço em execução. Pressione Ctrl+C para parar.")
@@ -877,4 +936,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -2,6 +2,8 @@ import requests
 import os
 from pathlib import Path
 from utils.utilidades import printdbg
+
+HTTP_TIMEOUT = (10, 30)
 from database import get_db_connection, close_db_connection
 from models.credenciais import get_credencial_by_env_key, update_tokens_by_env_key
 
@@ -69,7 +71,7 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
     }
 
     try:
-        response = requests.post(url, headers=headers, json=payload)
+        response = requests.post(url, headers=headers, json=payload, timeout=HTTP_TIMEOUT)
         if response.status_code == 200:
             tokens = response.json()
             new_access_token = tokens.get("access_token")
@@ -107,7 +109,7 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
 def fetch_cartola_data():
     """Obtém dados do mercado (não requer autenticação)."""
     try:
-        response = requests.get(API_URL_MERCADO)
+        response = requests.get(API_URL_MERCADO, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         data = response.json()
         return data
@@ -118,7 +120,7 @@ def fetch_cartola_data():
 def fetch_status_data():
     """Obtém o status do mercado (não requer autenticação)."""
     try:
-        response = requests.get(API_URL_STATUS)
+        response = requests.get(API_URL_STATUS, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -128,7 +130,7 @@ def fetch_status_data():
 def fetch_pontuados_data(rodada):
     """Obtém dados de atletas pontuados para a rodada especificada (não requer autenticação)."""
     try:
-        response = requests.get(API_URL_PONTUADOS.format(rodada))
+        response = requests.get(API_URL_PONTUADOS.format(rodada), timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -138,7 +140,7 @@ def fetch_pontuados_data(rodada):
 def fetch_partidas_data(rodada):
     """Obtém dados das partidas da rodada especificada (não requer autenticação)."""
     try:
-        response = requests.get(API_URL_PARTIDAS.format(rodada))
+        response = requests.get(API_URL_PARTIDAS.format(rodada), timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -148,7 +150,7 @@ def fetch_partidas_data(rodada):
 def fetch_esquemas_data():
     """Obtém dados dos esquemas disponíveis (não requer autenticação)."""
     try:
-        response = requests.get(API_URL_ESQUEMAS)
+        response = requests.get(API_URL_ESQUEMAS, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -176,7 +178,7 @@ def fetch_destaques_data(access_token=None, env_key="AERO_RBSV"):
     }
 
     try:
-        response = requests.get(API_URL_DESTAQUES, headers=headers)
+        response = requests.get(API_URL_DESTAQUES, headers=headers, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         data = response.json()
         printdbg(f"Destaques API retornou: tipo={type(data)}, tamanho={len(data) if isinstance(data, list) else 'N/A'}")
@@ -188,7 +190,7 @@ def fetch_destaques_data(access_token=None, env_key="AERO_RBSV"):
             if new_token:
                 headers["Authorization"] = f"Bearer {new_token}"
                 try:
-                    response = requests.get(API_URL_DESTAQUES, headers=headers)
+                    response = requests.get(API_URL_DESTAQUES, headers=headers, timeout=HTTP_TIMEOUT)
                     response.raise_for_status()
                     data = response.json()
                     printdbg(f"Destaques API retornou (após refresh): tipo={type(data)}, tamanho={len(data) if isinstance(data, list) else 'N/A'}")
@@ -228,7 +230,7 @@ def fetch_gato_mestre_data(access_token=None, env_key="AERO_RBSV"):
     }
 
     try:
-        response = requests.get(API_URL_GATO_MESTRE, headers=headers)
+        response = requests.get(API_URL_GATO_MESTRE, headers=headers, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -238,7 +240,7 @@ def fetch_gato_mestre_data(access_token=None, env_key="AERO_RBSV"):
             if new_token:
                 headers["Authorization"] = f"Bearer {new_token}"
                 try:
-                    response = requests.get(API_URL_GATO_MESTRE, headers=headers)
+                    response = requests.get(API_URL_GATO_MESTRE, headers=headers, timeout=HTTP_TIMEOUT)
                     response.raise_for_status()
                     return response.json()
                 except requests.exceptions.RequestException as e:
@@ -273,7 +275,7 @@ def fetch_team_data(access_token=None, env_key="AERO_RBSV"):
     }
 
     try:
-        response = requests.get(API_URL_TEAM_DATA, headers=headers)
+        response = requests.get(API_URL_TEAM_DATA, headers=headers, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         return response.json(), token
     except requests.exceptions.RequestException as e:
@@ -283,7 +285,7 @@ def fetch_team_data(access_token=None, env_key="AERO_RBSV"):
             if new_token:
                 headers["Authorization"] = f"Bearer {new_token}"
                 try:
-                    response = requests.get(API_URL_TEAM_DATA, headers=headers)
+                    response = requests.get(API_URL_TEAM_DATA, headers=headers, timeout=HTTP_TIMEOUT)
                     response.raise_for_status()
                     return response.json(), new_token
                 except requests.exceptions.RequestException as e:
@@ -323,7 +325,7 @@ def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="AERO
     }
 
     try:
-        response = requests.post(API_URL_SALVAR_TIME, json=time_para_escalacao, headers=headers)
+        response = requests.post(API_URL_SALVAR_TIME, json=time_para_escalacao, headers=headers, timeout=HTTP_TIMEOUT)
         status = response.status_code
         # Tentar JSON; se falhar, manter texto cru
         try:
@@ -374,7 +376,7 @@ def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="AERO
             if new_token:
                 headers["Authorization"] = f"Bearer {new_token}"
                 try:
-                    response = requests.post(API_URL_SALVAR_TIME, json=time_para_escalacao, headers=headers)
+                    response = requests.post(API_URL_SALVAR_TIME, json=time_para_escalacao, headers=headers, timeout=HTTP_TIMEOUT)
                     status = response.status_code
                     try:
                         data = response.json()

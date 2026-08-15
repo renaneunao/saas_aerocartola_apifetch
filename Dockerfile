@@ -19,7 +19,8 @@ RUN mkdir -p /app/logs
 
 # Variáveis de ambiente padrão
 ENV PYTHONUNBUFFERED=1
-ENV FETCH_INTERVAL_MINUTES=5
+ENV FETCH_INTERVAL_NORMAL_MINUTES=30
+ENV FETCH_INTERVAL_CLOSING_DAY_MINUTES=5
 
 # Comando padrão
 CMD ["python", "data_fetcher.py"]
