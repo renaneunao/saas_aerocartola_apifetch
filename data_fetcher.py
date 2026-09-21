@@ -31,7 +31,8 @@ from api_cartola import (
     fetch_esquemas_data,
     fetch_destaques_data
 )
-# Removidos: CBF, Joga10 e Prováveis - não são responsabilidade deste container
+from models.provaveis_externos import DEFAULT_URL as DEFAULT_PROVAVEIS_EXTERNAL_URL
+from models.provaveis_externos import sync_html as sync_external_probables_html
 
 # Importar modelos para atualizar dados (tabelas são criadas via init.sql)
 from models.atletas import update_atletas
@@ -42,7 +43,6 @@ from models.partidas import update_partidas
 from models.pontuados import update_pontuados
 from models.esquemas import update_esquemas
 from models.destaques import update_destaques
-# Removidos: provaveis_cartola - não é responsabilidade deste container
 
 # Configuração de logging
 logging.basicConfig(
@@ -63,6 +63,8 @@ BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
 # endpoint de status do mercado.
 NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
 CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
+PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
+PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_EXTERNAL_URL)
 
 def get_brasilia_datetime() -> str:
     """Retorna a data e hora atual no horário de Brasília formatada"""
@@ -365,6 +367,44 @@ class DataFetcherService:
         except Exception as e:
             logger.error(f"Erro ao obter rodada atual: {e}")
             return None
+
+    @retry_on_failure(max_retries=2, delay=2.0)
+    @rate_limiter
+    def fetch_and_store_external_probables(self, rodada: int) -> bool:
+        """Busca o snapshot público de prováveis da rodada atual.
+
+        Uma falha da fonte externa não interrompe o ciclo oficial do Cartola
+        nem altera ``acf_atletas.status_id``.
+        """
+        if not PROVAVEIS_EXTERNAL_ENABLED:
+            logger.info("Prováveis externos desativados por configuração")
+            return True
+        try:
+            response = requests.get(
+                PROVAVEIS_EXTERNAL_URL,
+                timeout=(10, 30),
+                headers={"User-Agent": "AeroCartola/1.0 (snapshot publico de provaveis)"},
+            )
+            response.raise_for_status()
+            from utils.utilidades import get_temporada_atual
+            conn = get_db_connection()
+            if not conn:
+                logger.error("Não foi possível conectar para salvar prováveis externos")
+                return False
+            try:
+                summary = sync_external_probables_html(
+                    conn, response.text, get_temporada_atual(), int(rodada)
+                )
+            finally:
+                close_db_connection(conn)
+            logger.info(
+                "Prováveis externos sincronizados: %s registros, %s clubes, %s mapeados, %s pendentes",
+                summary["registros"], summary["clubes"], summary["mapeados"], summary["nao_mapeados"],
+            )
+            return True
+        except Exception as exc:
+            logger.warning("Falha ao sincronizar prováveis externos: %s", exc, exc_info=True)
+            return False
 
     @staticmethod
     def _is_closing_day(status_data: Optional[Dict[str, Any]]) -> bool:
@@ -677,7 +717,8 @@ class DataFetcherService:
             'cartola_data': False,
             'status': False,
             'partidas': False,
-            'pontuados': False
+            'pontuados': False,
+            'provaveis_externos': False,
         }
         
         try:
@@ -689,6 +730,10 @@ class DataFetcherService:
                 return
             
             logger.info(f"Rodada atual validada: {rodada_atual}")
+
+            # A fonte externa é independente do mercado oficial. O snapshot
+            # é salvo separadamente e nunca sobrescreve o status da Globo.
+            results['provaveis_externos'] = self.fetch_and_store_external_probables(rodada_atual)
             
             # 0.1 Verificar status do mercado ANTES de atualizar qualquer tabela
             status_data = fetch_status_data()

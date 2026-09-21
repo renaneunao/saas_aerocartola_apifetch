@@ -180,6 +180,58 @@ CREATE TABLE IF NOT EXISTS acf_destaques_historico (
 CREATE INDEX IF NOT EXISTS idx_destaques_historico_rodada ON acf_destaques_historico(rodada_id);
 CREATE INDEX IF NOT EXISTS idx_destaques_historico_clube ON acf_destaques_historico(clube_id);
 
+-- Snapshot opcional de fontes externas de prováveis. Os IDs externos não são
+-- usados como chave do Cartola; o vínculo com atleta_id pode ficar nulo para
+-- revisão manual sem bloquear a ingestão do restante da rodada.
+CREATE TABLE IF NOT EXISTS acf_provaveis_fontes (
+    id BIGSERIAL PRIMARY KEY,
+    temporada INTEGER NOT NULL,
+    rodada_id INTEGER NOT NULL,
+    fonte VARCHAR(50) NOT NULL,
+    atleta_externo_id TEXT NOT NULL,
+    nome_externo TEXT,
+    slug_externo TEXT,
+    clube_id INTEGER,
+    clube_slug_externo TEXT,
+    posicao_id INTEGER,
+    atleta_id INTEGER,
+    status VARCHAR(30) NOT NULL,
+    confianca_mapeamento NUMERIC(5,4) DEFAULT 0,
+    metodo_mapeamento VARCHAR(50),
+    dados_brutos JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    capturado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT uq_acf_provaveis_fontes_snapshot
+        UNIQUE (temporada, rodada_id, fonte, atleta_externo_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_acf_provaveis_fontes_contexto
+    ON acf_provaveis_fontes (temporada, rodada_id, fonte, ativo);
+CREATE INDEX IF NOT EXISTS idx_acf_provaveis_fontes_atleta
+    ON acf_provaveis_fontes (temporada, rodada_id, fonte, atleta_id);
+CREATE INDEX IF NOT EXISTS idx_acf_provaveis_fontes_clube
+    ON acf_provaveis_fontes (temporada, rodada_id, clube_id);
+
+-- Vínculos validados manualmente no painel administrativo do Aero Cartola.
+-- A ingestão externa não preenche atleta_id nesta tabela; somente a ação
+-- explícita do administrador cria uma associação oficial.
+CREATE TABLE IF NOT EXISTS acw_provaveis_mapeamentos (
+    id BIGSERIAL PRIMARY KEY,
+    temporada INTEGER NOT NULL,
+    rodada_id INTEGER NOT NULL,
+    fonte VARCHAR(50) NOT NULL,
+    atleta_externo_id TEXT NOT NULL,
+    atleta_id INTEGER,
+    atualizado_por INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_acw_provaveis_mapeamento
+        UNIQUE (temporada, rodada_id, fonte, atleta_externo_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_acw_provaveis_mapeamento_atleta
+    ON acw_provaveis_mapeamentos (temporada, rodada_id, fonte, atleta_id);
+
 -- Inserir credencial padrão do time Aero-RBSV
 -- NOTA: As credenciais devem ser inseridas via script Python (insert_default_credential.py)
 -- que lê os tokens do arquivo .env. Execute após inicializar o banco:
