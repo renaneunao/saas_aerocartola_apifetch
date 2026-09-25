@@ -4,6 +4,12 @@ def update_pontuados(conn, pontuados_data, rodada):
     from utils.utilidades import get_temporada_atual
     t0 = time.time()
     cursor = conn.cursor()
+
+    # A API também entrega scouts de pênalti/trave. Bancos antigos só
+    # possuíam os campos originais; esta migração é idempotente.
+    for column in ('scout_dp', 'scout_ft', 'scout_pc', 'scout_pp', 'scout_ps', 'scout_v'):
+        cursor.execute(f'ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS {column} INTEGER DEFAULT 0')
+    conn.commit()
     temporada = get_temporada_atual()
     
     # Se já existem pontuações para a rodada, pula
@@ -28,6 +34,7 @@ def update_pontuados(conn, pontuados_data, rodada):
             scout.get('A', 0), scout.get('CA', 0), scout.get('CV', 0), scout.get('DE', 0), scout.get('DS', 0),
             scout.get('FC', 0), scout.get('FD', 0), scout.get('FF', 0), scout.get('FS', 0), scout.get('G', 0),
             scout.get('GS', 0), scout.get('I', 0), scout.get('SG', 0),
+            scout.get('DP', 0), scout.get('FT', 0), scout.get('PC', 0), scout.get('PP', 0), scout.get('PS', 0), scout.get('V', 0),
             temporada
         )
         rows.append(row)
@@ -40,7 +47,8 @@ def update_pontuados(conn, pontuados_data, rodada):
         INSERT INTO acf_pontuados (
             atleta_id, rodada_id, clube_id, posicao_id, pontuacao, entrou_em_campo, apelido, foto,
             scout_a, scout_ca, scout_cv, scout_de, scout_ds, scout_fc, scout_fd, scout_ff, scout_fs,
-            scout_g, scout_gs, scout_i, scout_sg, temporada
+            scout_g, scout_gs, scout_i, scout_sg,
+            scout_dp, scout_ft, scout_pc, scout_pp, scout_ps, scout_v, temporada
         ) VALUES %s
         ON CONFLICT (atleta_id, rodada_id) DO UPDATE SET
             clube_id = EXCLUDED.clube_id,
@@ -62,6 +70,12 @@ def update_pontuados(conn, pontuados_data, rodada):
             scout_gs = EXCLUDED.scout_gs,
             scout_i = EXCLUDED.scout_i,
             scout_sg = EXCLUDED.scout_sg,
+            scout_dp = EXCLUDED.scout_dp,
+            scout_ft = EXCLUDED.scout_ft,
+            scout_pc = EXCLUDED.scout_pc,
+            scout_pp = EXCLUDED.scout_pp,
+            scout_ps = EXCLUDED.scout_ps,
+            scout_v = EXCLUDED.scout_v,
             temporada = EXCLUDED.temporada
     '''
     execute_values(cursor, insert_sql, rows, page_size=1000)

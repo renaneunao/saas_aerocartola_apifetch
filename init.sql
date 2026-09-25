@@ -107,11 +107,25 @@ CREATE TABLE IF NOT EXISTS acf_pontuados (
     scout_gs INTEGER DEFAULT 0, -- Gol Sofrido
     scout_i INTEGER DEFAULT 0,  -- Impedimento
     scout_sg INTEGER DEFAULT 0, -- Sem Gol
+    scout_dp INTEGER DEFAULT 0, -- Defesa de pênalti
+    scout_ft INTEGER DEFAULT 0, -- Finalização na trave
+    scout_pc INTEGER DEFAULT 0, -- Pênalti cometido
+    scout_pp INTEGER DEFAULT 0, -- Pênalti perdido
+    scout_ps INTEGER DEFAULT 0, -- Pênalti sofrido
+    scout_v INTEGER DEFAULT 0,  -- Variação registrada pela API
     temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     PRIMARY KEY (atleta_id, rodada_id),
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id)
 );
+
+-- Migração idempotente para bancos criados antes dos scouts adicionais.
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_dp INTEGER DEFAULT 0;
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_ft INTEGER DEFAULT 0;
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_pc INTEGER DEFAULT 0;
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_pp INTEGER DEFAULT 0;
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_ps INTEGER DEFAULT 0;
+ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_v INTEGER DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS acf_destaques (
     atleta_id INTEGER PRIMARY KEY,
