@@ -40,6 +40,9 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
 
     refresh_token = cred.get("refresh_token")
     id_token = cred.get("id_token")
+    if not refresh_token:
+        printdbg(f"Refresh token indisponível para {env_key}; não é possível renovar a sessão")
+        return None
     if not current_token:
         current_token = cred.get("access_token")
     if not current_token:
@@ -74,9 +77,12 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
         response = requests.post(url, headers=headers, json=payload, timeout=HTTP_TIMEOUT)
         if response.status_code == 200:
             tokens = response.json()
-            new_access_token = tokens.get("access_token")
-            new_refresh_token = tokens.get("refresh_token")
-            new_id_token = tokens.get("id_token")
+            new_access_token = tokens.get("access_token") if isinstance(tokens, dict) else None
+            new_refresh_token = tokens.get("refresh_token") if isinstance(tokens, dict) else None
+            new_id_token = tokens.get("id_token") if isinstance(tokens, dict) else None
+            if not new_access_token:
+                printdbg(f"Refresh de {env_key} retornou sucesso HTTP sem access token; credencial preservada")
+                return None
 
             # Persistir no banco
             conn2 = get_db_connection()
@@ -87,23 +93,16 @@ def refresh_access_token(current_token, env_key="AERO_RBSV"):
             printdbg(f"Token atualizado com sucesso para {env_key}")
             return new_access_token
         else:
-            error_msg = f"Falha no refresh ({response.status_code})"
-            try:
-                error_body = response.json()
-                error_msg += f": {error_body}"
-            except:
-                error_msg += f". Resposta: {response.text[:200]}"
-            printdbg(error_msg)
+            # Não registrar o corpo: endpoints de autenticação podem ecoar
+            # metadados sensíveis. O status HTTP basta para o diagnóstico.
+            printdbg(f"Falha no refresh de {env_key} (HTTP {response.status_code}); corpo omitido")
             return None
     except requests.exceptions.JSONDecodeError as e:
-        printdbg(f"Erro ao parsear resposta do refresh: {e}")
-        if hasattr(e, 'response') and e.response is not None:
-            printdbg(f"Resposta recebida: {e.response.text[:200]}")
+        printdbg(f"Resposta inválida do endpoint de refresh ({type(e).__name__}); conteúdo omitido")
         return None
     except requests.exceptions.RequestException as e:
-        printdbg(f"Erro de rede no refresh: {e}")
-        if hasattr(e, 'response') and e.response is not None:
-            printdbg(f"Status: {e.response.status_code}, Resposta: {e.response.text[:200]}")
+        status = getattr(getattr(e, 'response', None), 'status_code', None)
+        printdbg(f"Falha de rede no refresh ({type(e).__name__}, HTTP {status or 'sem resposta'}); corpo omitido")
         return None
 
 def fetch_cartola_data():
@@ -234,7 +233,7 @@ def fetch_gato_mestre_data(access_token=None, env_key="AERO_RBSV"):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
-        if hasattr(e.response, 'status_code') and e.response.status_code == 401:
+        if getattr(getattr(e, 'response', None), 'status_code', None) == 401:
             printdbg(f"Token expirado para {env_key}. Tentando atualizar o token...")
             new_token = refresh_access_token(token, env_key)
             if new_token:
@@ -279,7 +278,7 @@ def fetch_team_data(access_token=None, env_key="AERO_RBSV"):
         response.raise_for_status()
         return response.json(), token
     except requests.exceptions.RequestException as e:
-        if hasattr(e.response, 'status_code') and e.response.status_code == 401:
+        if getattr(getattr(e, 'response', None), 'status_code', None) == 401:
             printdbg(f"Token expirado para {env_key}. Tentando atualizar o token...")
             new_token = refresh_access_token(token, env_key)
             if new_token:
@@ -370,7 +369,7 @@ def salvar_time_no_cartola(time_para_escalacao, access_token=None, env_key="AERO
                 printdbg("Erro 409: Conflito na escalação. Possíveis causas: time já escalado, rodada fechada ou escalação inválida.")
             return False
     except requests.exceptions.RequestException as e:
-        if hasattr(e.response, 'status_code') and e.response.status_code == 401:
+        if getattr(getattr(e, 'response', None), 'status_code', None) == 401:
             printdbg(f"Token expirado para {env_key}. Tentando atualizar o token...")
             new_token = refresh_access_token(token, env_key)
             if new_token:

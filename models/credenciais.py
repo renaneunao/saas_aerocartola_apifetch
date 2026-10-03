@@ -32,11 +32,20 @@ def update_tokens_by_env_key(conn: psycopg2.extensions.connection, env_key: str,
         params.append(id_token)
     if not sets:
         return
-    # O token usado pelo AERO-RBSV é mantido junto ao time no AERO Web.
-    # O Data Fetcher precisa atualizar a mesma origem quando o refresh funcionar.
+    # O Data Fetcher usa a linha original do Aero-RBSV. Outras contas podem
+    # ter times homônimos (fixtures/clones); uma rotação não deve sobrescrevê-las.
     if env_key == 'AERO_RBSV':
-        params.append('Aero-RBSV')
-        query = f"UPDATE acw_teams SET {', '.join(sets)} WHERE team_name = %s"
+        cursor.execute(
+            "SELECT id FROM acw_teams WHERE team_name = %s ORDER BY id ASC LIMIT 1",
+            ('Aero-RBSV',),
+        )
+        original_team = cursor.fetchone()
+        if original_team:
+            params.append(original_team[0])
+            query = f"UPDATE acw_teams SET {', '.join(sets)} WHERE id = %s"
+        else:
+            params.append(env_key)
+            query = f"UPDATE acf_credenciais SET {', '.join(sets)} WHERE env_key = %s"
     else:
         params.append(env_key)
         query = f"UPDATE acf_credenciais SET {', '.join(sets)} WHERE env_key = %s"
@@ -72,7 +81,7 @@ def get_credencial_by_env_key(conn: psycopg2.extensions.connection, env_key: str
             SELECT id, team_name, access_token, refresh_token, id_token
             FROM acw_teams
             WHERE team_name = %s
-            ORDER BY updated_at DESC NULLS LAST, id DESC
+            ORDER BY id ASC
             LIMIT 1
         ''', ('Aero-RBSV',))
         r = cursor.fetchone()

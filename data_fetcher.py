@@ -718,6 +718,7 @@ class DataFetcherService:
             'status': False,
             'partidas': False,
             'pontuados': False,
+            'destaques': False,
             'provaveis_externos': False,
         }
         
@@ -800,40 +801,27 @@ class DataFetcherService:
                 
                 results['partidas'] = True
                 
-                # Destaques (atualizados a cada ciclo configurado)
-                self.fetch_and_store_destaques(rodada_atual)
+                # Destaques usam a credencial Cartola e são atualizados por ciclo.
+                results['destaques'] = self.fetch_and_store_destaques(rodada_atual)
                 
-                # PONTUADOS: Verificar TODAS as rodadas faltantes (de 1 até rodada_atual - 1, ou até 38 se for a última)
-                # REGRA ESPECIAL: Sempre verificar rodada 38 (última do campeonato), mesmo que não seja a atual
+                # Pontuados: buscar rodadas concluídas faltantes; rodada 38 só
+                # entra no intervalo quando for de fato a rodada atual.
                 if rodada_atual > 1:
                     logger.info("Verificando rodadas de pontuados faltantes...")
                     missing_pontuados = self.get_missing_rounds('pontuados', rodada_atual)
                     
-                    # FORÇA ESPECIAL: Sempre verificar se rodada 38 existe (última do campeonato)
-                    # Mesmo que não seja a rodada atual, pode ter sido finalizada
-                    if 38 not in missing_pontuados:
-                        rodada_38_existe = self._check_round_exists('pontuados', 38)
-                        if not rodada_38_existe:
-                            logger.info("Rodada 38 não encontrada. Forçando busca da última rodada do campeonato...")
-                            missing_pontuados.append(38)
-                    
                     if missing_pontuados:
                         logger.info(f"Rodadas de pontuados faltantes encontradas: {missing_pontuados}")
+                        pontuados_por_rodada = []
                         for rodada_missing in missing_pontuados:
                             logger.info(f"Buscando pontuados da rodada {rodada_missing}...")
-                            self.fetch_and_store_pontuados(rodada_missing)
-                        results['pontuados'] = True
+                            pontuados_por_rodada.append(self.fetch_and_store_pontuados(rodada_missing))
+                        results['pontuados'] = all(pontuados_por_rodada)
                     else:
-                        max_round_msg = 38 if rodada_atual == 38 else rodada_atual - 1
-                        logger.info(f"Todos os pontuados das rodadas (1 até {max_round_msg}) já estão atualizados")
+                        logger.info(f"Todos os pontuados das rodadas concluídas (1 até {rodada_atual - 1}) já estão atualizados")
                         results['pontuados'] = True
                 else:
-                    # Mesmo se rodada atual for 1, verificar se rodada 38 existe (pode ter sido finalizado o campeonato)
-                    logger.info("Rodada atual é 1. Verificando se rodada 38 (final do campeonato) precisa ser buscada...")
-                    rodada_38_existe = self._check_round_exists('pontuados', 38)
-                    if not rodada_38_existe:
-                        logger.info("Rodada 38 não encontrada. Forçando busca da última rodada do campeonato...")
-                        self.fetch_and_store_pontuados(38)
+                    logger.info("Rodada 1: ainda não há rodadas concluídas com pontuações para buscar.")
                     results['pontuados'] = True
             
             elapsed_time = time.time() - start_time
