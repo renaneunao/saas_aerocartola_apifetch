@@ -92,8 +92,9 @@ def sync_json(conn, payload: Dict[str, Any], market: list, temporada: int, rodad
         for player in market
         if isinstance(player, dict) and player.get("atleta_id") is not None
     }
-    rows = []
+    candidates_by_id = {}
     teams_seen = set()
+    club_votes = {}
     for external_team, team_data in payload["teams"].items():
         if not isinstance(team_data, dict):
             continue
@@ -105,39 +106,81 @@ def sync_json(conn, payload: Dict[str, Any], market: list, temporada: int, rodad
                 continue
             external_id = str(player["id"])
             details = market_by_id.get(external_id, {})
-            slot = str(player.get("slot") or "").upper()
-            alternate_id = player.get("duvida_com")
-            alternate = market_by_id.get(str(alternate_id), {}) if alternate_id is not None else {}
-            declared_status = _canonical_status(player.get("sit"))
-            status = _canonical_status(player.get("sit"), has_alternate=alternate_id is not None)
-            external_name = (
-                details.get("apelido_abreviado") or details.get("apelido")
-                or details.get("nome") or str(player["id"])
-            )
-            external_slug = normalize(external_name)
-            raw = {
+            market_club_id = details.get("clube_id")
+            if market_club_id is not None and team_slug:
+                club_votes.setdefault(str(market_club_id), {}).setdefault(team_slug, 0)
+                club_votes[str(market_club_id)][team_slug] += 1
+            candidates_by_id.setdefault(external_id, []).append({
+                "player": player,
                 "team": external_team,
-                "slot": slot,
-                "name": external_name,
-                "slug": external_slug,
-                "status": normalize(player.get("sit")),
-                "status_declarado": declared_status,
-                "status_calculado": status,
-                "duvida_com": alternate_id,
-                "alt_cap": (
-                    alternate.get("apelido_abreviado") or alternate.get("apelido")
-                    or alternate.get("nome") or None
-                ),
-                "photo": details.get("foto"),
-                "source": "api/lineups-public",
-            }
-            rows.append((
-                temporada, rodada, SOURCE, external_id, external_name, external_slug,
-                None, team_slug, POSITION_BY_SLOT.get(slot), None, status,
-                "aguarda_mapeamento_manual", Json(raw), True,
-            ))
+                "team_slug": team_slug,
+                "details": details,
+            })
 
-    return _persist_snapshot(conn, rows, teams_seen, temporada, rodada, captured_at)
+    # O lineups-public pode repetir atletas em elencos antigos/incompletos.
+    # A tabela tem uma chave por ID externo; para duplicatas, escolhemos apenas
+    # a ocorrência que coincide com o clube predominante desse ID no mercado.
+    trusted_team_by_club = {}
+    for club_id, votes in club_votes.items():
+        ranked = sorted(votes.items(), key=lambda item: item[1], reverse=True)
+        if ranked and ranked[0][1] >= 6 and (len(ranked) == 1 or ranked[0][1] >= 2 * ranked[1][1]):
+            trusted_team_by_club[club_id] = ranked[0][0]
+
+    rows = []
+    duplicates_resolved = 0
+    duplicates_skipped = 0
+    for external_id, candidates in candidates_by_id.items():
+        if len(candidates) > 1:
+            details = candidates[0]["details"]
+            market_club_id = details.get("clube_id")
+            expected_team = trusted_team_by_club.get(str(market_club_id)) if market_club_id is not None else None
+            candidates = [candidate for candidate in candidates if candidate["team_slug"] == expected_team]
+            if len(candidates) != 1:
+                duplicates_skipped += 1
+                continue
+            duplicates_resolved += 1
+
+        candidate = candidates[0]
+        player = candidate["player"]
+        external_team = candidate["team"]
+        team_slug = candidate["team_slug"]
+        details = candidate["details"]
+        slot = str(player.get("slot") or "").upper()
+        alternate_id = player.get("duvida_com")
+        alternate = market_by_id.get(str(alternate_id), {}) if alternate_id is not None else {}
+        declared_status = _canonical_status(player.get("sit"))
+        status = _canonical_status(player.get("sit"), has_alternate=alternate_id is not None)
+        external_name = (
+            details.get("apelido_abreviado") or details.get("apelido")
+            or details.get("nome") or external_id
+        )
+        external_slug = normalize(external_name)
+        raw = {
+            "team": external_team,
+            "slot": slot,
+            "name": external_name,
+            "slug": external_slug,
+            "status": normalize(player.get("sit")),
+            "status_declarado": declared_status,
+            "status_calculado": status,
+            "duvida_com": alternate_id,
+            "alt_cap": (
+                alternate.get("apelido_abreviado") or alternate.get("apelido")
+                or alternate.get("nome") or None
+            ),
+            "photo": details.get("foto"),
+            "source": "api/lineups-public",
+        }
+        rows.append((
+            temporada, rodada, SOURCE, external_id, external_name, external_slug,
+            None, team_slug, POSITION_BY_SLOT.get(slot), None, status,
+            "aguarda_mapeamento_manual", Json(raw), True,
+        ))
+
+    summary = _persist_snapshot(conn, rows, teams_seen, temporada, rodada, captured_at)
+    summary["duplicatas_resolvidas"] = duplicates_resolved
+    summary["duplicatas_ignoradas"] = duplicates_skipped
+    return summary
 
 
 def sync_html(conn, html: str, temporada: int, rodada: int, captured_at: Optional[datetime] = None) -> Dict[str, int]:

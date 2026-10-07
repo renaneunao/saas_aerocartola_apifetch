@@ -431,8 +431,9 @@ class DataFetcherService:
             finally:
                 close_db_connection(conn)
             logger.info(
-                "Prováveis externos sincronizados: %s registros, %s clubes, %s mapeados, %s pendentes",
+                "Prováveis externos sincronizados: %s registros, %s clubes, %s mapeados, %s pendentes, %s duplicatas resolvidas, %s ignoradas",
                 summary["registros"], summary["clubes"], summary["mapeados"], summary["nao_mapeados"],
+                summary.get("duplicatas_resolvidas", 0), summary.get("duplicatas_ignoradas", 0),
             )
             return True
         except Exception as exc:

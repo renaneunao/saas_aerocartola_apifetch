@@ -104,6 +104,37 @@ class ExternalProbablesParserTests(unittest.TestCase):
         self.assertEqual(row[12].adapted["alt_cap"], "Vargas")
         self.assertEqual(row[12].adapted["duvida_com"], 127871)
 
+    def test_duplicate_external_id_uses_market_club_roster(self):
+        conn = _Connection()
+        captured = {}
+
+        def capture_values(_cursor, _query, rows, **_kwargs):
+            captured["rows"] = rows
+
+        alpha = [{"id": 900, "slot": "MEI-C", "sit": "provavel"}]
+        alpha += [{"id": athlete_id, "slot": "MEI-C", "sit": "provavel"} for athlete_id in range(100, 106)]
+        beta = [{"id": 900, "slot": "MEI-C", "sit": "duvida", "duvida_com": 901}]
+        beta += [{"id": athlete_id, "slot": "MEI-C", "sit": "provavel"} for athlete_id in range(200, 206)]
+        payload = {"teams": {"alpha_v2": {"titulares": alpha}, "beta_v2": {"titulares": beta}}}
+        market = (
+            [{"atleta_id": athlete_id, "apelido_abreviado": f"Alpha {athlete_id}", "clube_id": 10}
+             for athlete_id in range(100, 106)]
+            + [{"atleta_id": athlete_id, "apelido_abreviado": f"Beta {athlete_id}", "clube_id": 20}
+               for athlete_id in range(200, 206)]
+            + [{"atleta_id": 900, "apelido_abreviado": "Duplicado", "clube_id": 20}]
+        )
+
+        with patch.object(provaveis_externos, "execute_values", side_effect=capture_values):
+            result = provaveis_externos.sync_json(conn, payload, market, temporada=2026, rodada=29)
+
+        rows = captured["rows"]
+        duplicate_row = next(row for row in rows if row[3] == "900")
+        self.assertEqual(duplicate_row[7], "beta")
+        self.assertEqual(duplicate_row[10], "duvida")
+        self.assertEqual(len({row[3] for row in rows}), len(rows))
+        self.assertEqual(result["duplicatas_resolvidas"], 1)
+        self.assertEqual(result["duplicatas_ignoradas"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
