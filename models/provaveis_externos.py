@@ -15,6 +15,8 @@ from psycopg2.extras import Json, execute_values
 
 SOURCE = "provaveisdocartola"
 DEFAULT_URL = "https://provaveisdocartola.com.br/"
+DEFAULT_LINEUPS_URL = "https://provaveisdocartola.com.br/api/lineups-public"
+DEFAULT_MARKET_URL = "https://provaveisdocartola.com.br/assets/data/mercado.images.json"
 
 POSITION_BY_SLOT = {
     "GOL": 1, "LAT-L": 2, "LAT-R": 2, "ZAG-L": 3, "ZAG-R": 3,
@@ -35,9 +37,111 @@ def _site_team_slug(value: str) -> str:
     return slug
 
 
+def _canonical_status(value: Any, has_alternate: bool = False) -> str:
+    status_raw = normalize(value)
+    if has_alternate:
+        return "duvida"
+    return {
+        "provavel": "provavel", "ok": "provavel", "provaveis": "provavel",
+        "duvida": "duvida", "doubt": "duvida", "improvavel": "improvavel",
+        "suspenso": "suspenso", "lesionado": "lesionado", "fora": "fora",
+    }.get(status_raw, status_raw or "duvida")
+
+
+def _persist_snapshot(conn, rows, teams_seen, temporada, rodada, captured_at):
+    if not rows:
+        raise ValueError("nenhum jogador encontrado na fonte externa")
+    cursor = conn.cursor()
+    now = captured_at or datetime.now(timezone.utc)
+    cursor.execute(
+        "UPDATE acf_provaveis_fontes SET ativo = FALSE "
+        "WHERE temporada = %s AND rodada_id = %s AND fonte = %s",
+        (temporada, rodada, SOURCE),
+    )
+    execute_values(cursor, """
+        INSERT INTO acf_provaveis_fontes (temporada, rodada_id, fonte, atleta_externo_id, nome_externo, slug_externo, clube_id, clube_slug_externo, posicao_id, atleta_id, status, metodo_mapeamento, dados_brutos, ativo, capturado_em)
+        VALUES %s
+        ON CONFLICT (temporada, rodada_id, fonte, atleta_externo_id) DO UPDATE SET
+            nome_externo = EXCLUDED.nome_externo, slug_externo = EXCLUDED.slug_externo,
+            clube_id = EXCLUDED.clube_id, clube_slug_externo = EXCLUDED.clube_slug_externo,
+            posicao_id = EXCLUDED.posicao_id, atleta_id = EXCLUDED.atleta_id,
+            status = EXCLUDED.status,
+            metodo_mapeamento = EXCLUDED.metodo_mapeamento, dados_brutos = EXCLUDED.dados_brutos,
+            ativo = TRUE, capturado_em = EXCLUDED.capturado_em
+        """, [row + (now,) for row in rows], page_size=250)
+    conn.commit()
+    cursor.close()
+    return {"registros": len(rows), "clubes": len(teams_seen), "mapeados": 0, "nao_mapeados": len(rows)}
+
+
+def sync_json(conn, payload: Dict[str, Any], market: list, temporada: int, rodada: int,
+              captured_at: Optional[datetime] = None) -> Dict[str, int]:
+    """Sincroniza o JSON que o próprio site usa para renderizar as escalações.
+
+    O HTML inicial não contém os titulares: o navegador os monta a partir de
+    ``/api/lineups-public``. Por isso este endpoint, não o DOM renderizado, é a
+    fonte autoritativa para ``sit`` e ``duvida_com``.
+    """
+    if not isinstance(payload, dict) or not isinstance(payload.get("teams"), dict):
+        raise ValueError("JSON de escalações externas inválido ou sem times")
+    if not isinstance(market, list):
+        raise ValueError("JSON de atletas externo inválido")
+
+    market_by_id = {
+        str(player.get("atleta_id")): player
+        for player in market
+        if isinstance(player, dict) and player.get("atleta_id") is not None
+    }
+    rows = []
+    teams_seen = set()
+    for external_team, team_data in payload["teams"].items():
+        if not isinstance(team_data, dict):
+            continue
+        team_slug = _site_team_slug(external_team)
+        if team_slug:
+            teams_seen.add(team_slug)
+        for player in team_data.get("titulares") or []:
+            if not isinstance(player, dict) or player.get("id") is None:
+                continue
+            external_id = str(player["id"])
+            details = market_by_id.get(external_id, {})
+            slot = str(player.get("slot") or "").upper()
+            alternate_id = player.get("duvida_com")
+            alternate = market_by_id.get(str(alternate_id), {}) if alternate_id is not None else {}
+            declared_status = _canonical_status(player.get("sit"))
+            status = _canonical_status(player.get("sit"), has_alternate=alternate_id is not None)
+            external_name = (
+                details.get("apelido_abreviado") or details.get("apelido")
+                or details.get("nome") or str(player["id"])
+            )
+            external_slug = normalize(external_name)
+            raw = {
+                "team": external_team,
+                "slot": slot,
+                "name": external_name,
+                "slug": external_slug,
+                "status": normalize(player.get("sit")),
+                "status_declarado": declared_status,
+                "status_calculado": status,
+                "duvida_com": alternate_id,
+                "alt_cap": (
+                    alternate.get("apelido_abreviado") or alternate.get("apelido")
+                    or alternate.get("nome") or None
+                ),
+                "photo": details.get("foto"),
+                "source": "api/lineups-public",
+            }
+            rows.append((
+                temporada, rodada, SOURCE, external_id, external_name, external_slug,
+                None, team_slug, POSITION_BY_SLOT.get(slot), None, status,
+                "aguarda_mapeamento_manual", Json(raw), True,
+            ))
+
+    return _persist_snapshot(conn, rows, teams_seen, temporada, rodada, captured_at)
+
+
 def sync_html(conn, html: str, temporada: int, rodada: int, captured_at: Optional[datetime] = None) -> Dict[str, int]:
     soup = BeautifulSoup(html, "lxml")
-    cursor = conn.cursor()
     rows = []
     teams_seen = set()
     for pitch in soup.select(".pitch[data-team]"):
@@ -53,15 +157,11 @@ def sync_html(conn, html: str, temporada: int, rodada: int, captured_at: Optiona
             status_raw = normalize(figure.get("data-sit") or "")
             if not status_raw:
                 status_raw = "duvida" if "duvida" in (figure.get("class") or []) else "provavel"
-            declared_status = {
-                "provavel": "provavel", "ok": "provavel", "provaveis": "provavel",
-                "duvida": "duvida", "doubt": "duvida", "improvavel": "improvavel",
-                "suspenso": "suspenso", "lesionado": "lesionado", "fora": "fora",
-            }.get(status_raw, status_raw or "duvida")
+            declared_status = _canonical_status(status_raw)
             # O site pode manter data-sit="provavel" no titular mesmo quando
             # há um substituto em .alt-cap. Nesse layout, o titular é dúvida:
             # a vaga depende da disputa/alternância com o nome indicado ali.
-            status = "duvida" if alternate else declared_status
+            status = _canonical_status(status_raw, has_alternate=alternate is not None)
             external_name = (caption.get_text(" ", strip=True) if caption else "") or (image.get("alt", "") if image else "")
             external_slug = figure.get("data-slug") or ""
             # O vínculo oficial é deliberadamente manual. O site externo tem
@@ -82,21 +182,4 @@ def sync_html(conn, html: str, temporada: int, rodada: int, captured_at: Optiona
             # entre este slug externo e um clube oficial antes de mapear atletas.
             rows.append((temporada, rodada, SOURCE, str(figure.get("data-id")), external_name, external_slug, None, team_slug, POSITION_BY_SLOT.get(slot), None, status, method, Json(raw), True))
 
-    if not rows:
-        raise ValueError("nenhum jogador encontrado no HTML externo")
-    now = captured_at or datetime.now(timezone.utc)
-    cursor.execute("UPDATE acf_provaveis_fontes SET ativo = FALSE WHERE temporada = %s AND rodada_id = %s AND fonte = %s", (temporada, rodada, SOURCE))
-    execute_values(cursor, """
-        INSERT INTO acf_provaveis_fontes (temporada, rodada_id, fonte, atleta_externo_id, nome_externo, slug_externo, clube_id, clube_slug_externo, posicao_id, atleta_id, status, metodo_mapeamento, dados_brutos, ativo, capturado_em)
-        VALUES %s
-        ON CONFLICT (temporada, rodada_id, fonte, atleta_externo_id) DO UPDATE SET
-            nome_externo = EXCLUDED.nome_externo, slug_externo = EXCLUDED.slug_externo,
-            clube_id = EXCLUDED.clube_id, clube_slug_externo = EXCLUDED.clube_slug_externo,
-            posicao_id = EXCLUDED.posicao_id, atleta_id = EXCLUDED.atleta_id,
-            status = EXCLUDED.status,
-            metodo_mapeamento = EXCLUDED.metodo_mapeamento, dados_brutos = EXCLUDED.dados_brutos,
-            ativo = TRUE, capturado_em = EXCLUDED.capturado_em
-        """, [row + (now,) for row in rows], page_size=250)
-    conn.commit()
-    cursor.close()
-    return {"registros": len(rows), "clubes": len(teams_seen), "mapeados": 0, "nao_mapeados": len(rows)}
+    return _persist_snapshot(conn, rows, teams_seen, temporada, rodada, captured_at)

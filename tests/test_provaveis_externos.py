@@ -68,6 +68,42 @@ class ExternalProbablesParserTests(unittest.TestCase):
         self.assertEqual(row[10], "provavel")
         self.assertIsNone(row[12].adapted["alt_cap"])
 
+    def test_public_lineups_json_uses_doubt_and_alternate_id(self):
+        conn = _Connection()
+        captured = {}
+
+        def capture_values(_cursor, _query, rows, **_kwargs):
+            captured["rows"] = rows
+
+        payload = {
+            "version": 3845,
+            "teams": {
+                "athletico-pr_v2": {
+                    "titulares": [{
+                        "id": 143193,
+                        "slot": "ATA-C",
+                        "sit": "duvida",
+                        "duvida_com": 127871,
+                    }]
+                }
+            },
+        }
+        market = [
+            {"atleta_id": 143193, "apelido_abreviado": "Viveros", "foto": "viveros.webp"},
+            {"atleta_id": 127871, "apelido_abreviado": "Vargas"},
+        ]
+
+        with patch.object(provaveis_externos, "execute_values", side_effect=capture_values):
+            result = provaveis_externos.sync_json(conn, payload, market, temporada=2026, rodada=29)
+
+        self.assertTrue(conn.committed)
+        self.assertEqual(result["registros"], 1)
+        row = captured["rows"][0]
+        self.assertEqual(row[4], "Viveros")
+        self.assertEqual(row[10], "duvida")
+        self.assertEqual(row[12].adapted["alt_cap"], "Vargas")
+        self.assertEqual(row[12].adapted["duvida_com"], 127871)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -18,6 +18,7 @@ from typing import Optional, Dict, Any
 from functools import wraps
 import requests
 import pytz
+from urllib.parse import urljoin, urlsplit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
@@ -31,8 +32,10 @@ from api_cartola import (
     fetch_esquemas_data,
     fetch_destaques_data
 )
-from models.provaveis_externos import DEFAULT_URL as DEFAULT_PROVAVEIS_EXTERNAL_URL
+from models.provaveis_externos import DEFAULT_LINEUPS_URL as DEFAULT_PROVAVEIS_LINEUPS_URL
+from models.provaveis_externos import DEFAULT_MARKET_URL as DEFAULT_PROVAVEIS_MARKET_URL
 from models.provaveis_externos import sync_html as sync_external_probables_html
+from models.provaveis_externos import sync_json as sync_external_probables_json
 
 # Importar modelos para atualizar dados (tabelas são criadas via init.sql)
 from models.atletas import update_atletas
@@ -64,7 +67,20 @@ BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
 NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
 CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
 PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
-PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_EXTERNAL_URL)
+PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_LINEUPS_URL)
+PROVAVEIS_EXTERNAL_MARKET_URL = os.getenv('PROVAVEIS_EXTERNAL_MARKET_URL', DEFAULT_PROVAVEIS_MARKET_URL)
+
+
+def _external_probables_urls():
+    """Resolve endpoints JSON mesmo se PROVAVEIS_EXTERNAL_URL ainda for a home antiga."""
+    configured = PROVAVEIS_EXTERNAL_URL
+    parsed = urlsplit(configured)
+    if parsed.path in ('', '/'):
+        return (
+            urljoin(configured.rstrip('/') + '/', 'api/lineups-public'),
+            PROVAVEIS_EXTERNAL_MARKET_URL,
+        )
+    return configured, PROVAVEIS_EXTERNAL_MARKET_URL
 
 def get_brasilia_datetime() -> str:
     """Retorna a data e hora atual no horário de Brasília formatada"""
@@ -380,8 +396,9 @@ class DataFetcherService:
             logger.info("Prováveis externos desativados por configuração")
             return True
         try:
+            lineups_url, market_url = _external_probables_urls()
             response = requests.get(
-                PROVAVEIS_EXTERNAL_URL,
+                lineups_url,
                 timeout=(10, 30),
                 headers={"User-Agent": "AeroCartola/1.0 (snapshot publico de provaveis)"},
             )
@@ -392,9 +409,25 @@ class DataFetcherService:
                 logger.error("Não foi possível conectar para salvar prováveis externos")
                 return False
             try:
-                summary = sync_external_probables_html(
-                    conn, response.text, get_temporada_atual(), int(rodada)
-                )
+                try:
+                    lineups = response.json()
+                except ValueError:
+                    # Compatibilidade temporária com URLs customizadas antigas
+                    # que ainda apontem para uma página HTML.
+                    summary = sync_external_probables_html(
+                        conn, response.text, get_temporada_atual(), int(rodada)
+                    )
+                else:
+                    market_response = requests.get(
+                        market_url,
+                        timeout=(10, 30),
+                        headers={"User-Agent": "AeroCartola/1.0 (snapshot publico de provaveis)"},
+                    )
+                    market_response.raise_for_status()
+                    summary = sync_external_probables_json(
+                        conn, lineups, market_response.json(),
+                        get_temporada_atual(), int(rodada),
+                    )
             finally:
                 close_db_connection(conn)
             logger.info(
