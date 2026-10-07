@@ -49,20 +49,35 @@ def sync_html(conn, html: str, temporada: int, rodada: int, captured_at: Optiona
             slot = (figure.get("data-slot") or "").upper()
             image = figure.find("img")
             caption = figure.find("figcaption")
+            alternate = figure.select_one(".alt-cap")
             status_raw = normalize(figure.get("data-sit") or "")
             if not status_raw:
                 status_raw = "duvida" if "duvida" in (figure.get("class") or []) else "provavel"
-            status = {
+            declared_status = {
                 "provavel": "provavel", "ok": "provavel", "provaveis": "provavel",
                 "duvida": "duvida", "doubt": "duvida", "improvavel": "improvavel",
                 "suspenso": "suspenso", "lesionado": "lesionado", "fora": "fora",
             }.get(status_raw, status_raw or "duvida")
+            # O site pode manter data-sit="provavel" no titular mesmo quando
+            # há um substituto em .alt-cap. Nesse layout, o titular é dúvida:
+            # a vaga depende da disputa/alternância com o nome indicado ali.
+            status = "duvida" if alternate else declared_status
             external_name = (caption.get_text(" ", strip=True) if caption else "") or (image.get("alt", "") if image else "")
             external_slug = figure.get("data-slug") or ""
             # O vínculo oficial é deliberadamente manual. O site externo tem
             # nomes/IDs próprios e nenhum palpite automático entra no cálculo.
             method = "aguarda_mapeamento_manual"
-            raw = {"team": external_team, "slot": slot, "name": external_name, "slug": external_slug, "status": status_raw, "photo": image.get("data-photo") if image else None}
+            raw = {
+                "team": external_team,
+                "slot": slot,
+                "name": external_name,
+                "slug": external_slug,
+                "status": status_raw,
+                "status_declarado": declared_status,
+                "status_calculado": status,
+                "alt_cap": alternate.get_text(" ", strip=True) if alternate else None,
+                "photo": image.get("data-photo") if image else None,
+            }
             # Nem os clubes são presumidos: o painel mantém um vínculo manual
             # entre este slug externo e um clube oficial antes de mapear atletas.
             rows.append((temporada, rodada, SOURCE, str(figure.get("data-id")), external_name, external_slug, None, team_slug, POSITION_BY_SLOT.get(slot), None, status, method, Json(raw), True))
