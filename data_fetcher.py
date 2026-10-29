@@ -66,6 +66,7 @@ BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
 # endpoint de status do mercado.
 NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
 CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
+MARKET_CLOSED_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_MARKET_CLOSED_MINUTES', '5'))
 PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_LINEUPS_URL)
 PROVAVEIS_EXTERNAL_MARKET_URL = os.getenv('PROVAVEIS_EXTERNAL_MARKET_URL', DEFAULT_PROVAVEIS_MARKET_URL)
@@ -469,7 +470,9 @@ class DataFetcherService:
             return False
 
     def _get_next_interval_minutes(self) -> int:
-        """Seleciona o intervalo normal ou o intervalo do dia de fechamento."""
+        """Seleciona intervalo ao vivo, do fechamento ou o intervalo normal."""
+        if isinstance(self.last_market_status, dict) and self.last_market_status.get('status_mercado') == 2:
+            return MARKET_CLOSED_INTERVAL_MINUTES
         if self._is_closing_day(self.last_market_status):
             return CLOSING_DAY_INTERVAL_MINUTES
         return NORMAL_INTERVAL_MINUTES
@@ -628,10 +631,11 @@ class DataFetcherService:
     
     @retry_on_failure(max_retries=3, delay=2.0)
     @rate_limiter
-    def fetch_and_store_pontuados(self, rodada: int) -> bool:
+    def fetch_and_store_pontuados(self, rodada: int, refresh_existing: bool = False) -> bool:
         """
         Busca e armazena atletas pontuados de uma rodada
-        Lógica: Atualiza uma vez por rodada (o modelo já verifica duplicação)
+        Rodadas históricas só são inseridas uma vez; a rodada ao vivo/recém-finalizada
+        pode solicitar upsert explícito para refletir as parciais mais recentes.
         """
         try:
             logger.info(f"Buscando atletas pontuados da rodada {rodada}...")
@@ -647,8 +651,11 @@ class DataFetcherService:
                 return False
             
             try:
-                update_pontuados(conn, pontuados_data, rodada)
-                logger.info(f"Atletas pontuados da rodada {rodada} armazenados com sucesso")
+                update_pontuados(conn, pontuados_data, rodada, refresh_existing=refresh_existing)
+                logger.info(
+                    f"Atletas pontuados da rodada {rodada} "
+                    f"{'atualizados' if refresh_existing else 'armazenados'} com sucesso"
+                )
                 return True
             finally:
                 close_db_connection(conn)
@@ -779,13 +786,22 @@ class DataFetcherService:
                 logger.info(f"Status do mercado: {status_mercado}")
                 
                 if status_mercado == 2:
-                    logger.info("⚠️  MERCADO FECHADO (status_mercado=2) - Jogos acontecendo, pulando atualização das tabelas")
-                    logger.info("As tabelas serão atualizadas novamente quando o mercado abrir (rodada finalizar)")
-                    print(f"\n{'='*60}")
-                    print("⚠️  MERCADO FECHADO - Pulando atualização")
-                    print("Os jogos estão acontecendo. As tabelas serão atualizadas após o mercado abrir.")
-                    print(f"{'='*60}\n")
-                    self.last_fetch_status = 'skipped_market_closed'
+                    logger.info(
+                        "Mercado fechado: sincronizando somente placares e parciais "
+                        "ao vivo da rodada %s.", rodada_atual
+                    )
+                    results['status'] = True
+                    results['partidas'] = self.fetch_and_store_partidas_per_round(rodada_atual)
+                    results['pontuados'] = self.fetch_and_store_pontuados(
+                        rodada_atual, refresh_existing=True
+                    )
+                    self.last_fetch_time = datetime.now(BRASILIA_TZ)
+                    self.last_fetch_status = 'success' if results['partidas'] and results['pontuados'] else 'partial'
+                    logger.info(
+                        "Sincronização ao vivo concluída: partidas=%s, parciais=%s; "
+                        "próxima consulta em %s minutos.",
+                        results['partidas'], results['pontuados'], MARKET_CLOSED_INTERVAL_MINUTES,
+                    )
                     return
                 else:
                     logger.info(f"✓ Mercado em estado adequado para atualização (status={status_mercado})")
@@ -794,6 +810,15 @@ class DataFetcherService:
             
             # 1. Status já foi verificado acima, marcar como sucesso
             results['status'] = True
+            refreshed_final_round = False
+
+            # Na reabertura, a rodada anterior já terminou. Reconsultá-la em modo
+            # upsert consolida a última pontuação sem tratar parciais como finais.
+            if status_data and status_data.get('status_mercado') == 1 and rodada_atual > 1:
+                results['pontuados'] = self.fetch_and_store_pontuados(
+                    rodada_atual - 1, refresh_existing=True
+                )
+                refreshed_final_round = True
             
             # 2. Buscar dados principais do Cartola (atletas, clubes, etc.)
             results['cartola_data'] = self.fetch_and_store_cartola_data()
@@ -850,10 +875,14 @@ class DataFetcherService:
                         for rodada_missing in missing_pontuados:
                             logger.info(f"Buscando pontuados da rodada {rodada_missing}...")
                             pontuados_por_rodada.append(self.fetch_and_store_pontuados(rodada_missing))
-                        results['pontuados'] = all(pontuados_por_rodada)
+                        results['pontuados'] = (
+                            (results['pontuados'] if refreshed_final_round else True)
+                            and all(pontuados_por_rodada)
+                        )
                     else:
                         logger.info(f"Todos os pontuados das rodadas concluídas (1 até {rodada_atual - 1}) já estão atualizados")
-                        results['pontuados'] = True
+                        if not refreshed_final_round:
+                            results['pontuados'] = True
                 else:
                     logger.info("Rodada 1: ainda não há rodadas concluídas com pontuações para buscar.")
                     results['pontuados'] = True

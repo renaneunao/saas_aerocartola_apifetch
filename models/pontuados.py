@@ -1,4 +1,4 @@
-def update_pontuados(conn, pontuados_data, rodada):
+def update_pontuados(conn, pontuados_data, rodada, refresh_existing=False):
     from psycopg2.extras import execute_values
     import time
     from utils.utilidades import get_temporada_atual
@@ -12,12 +12,16 @@ def update_pontuados(conn, pontuados_data, rodada):
     conn.commit()
     temporada = get_temporada_atual()
     
-    # Se já existem pontuações para a rodada, pula
-    cursor.execute('SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s AND temporada = %s', (rodada, temporada))
-    exists_count = cursor.fetchone()[0]
-    if exists_count and exists_count > 0:
-        print(f"Rodada {rodada} já existente em 'pontuados' (temporada {temporada}). Pulando atualização.")
-        return
+    # Rodadas históricas completas são imutáveis para o coletor normal.
+    # A rodada em andamento e a rodada recém-finalizada precisam ser atualizadas:
+    # a API devolve parciais que mudam durante os jogos e pode consolidar ajustes
+    # depois que o mercado reabre.
+    if not refresh_existing:
+        cursor.execute('SELECT COUNT(*) FROM acf_pontuados WHERE rodada_id = %s AND temporada = %s', (rodada, temporada))
+        exists_count = cursor.fetchone()[0]
+        if exists_count and exists_count > 0:
+            print(f"Rodada {rodada} já existente em 'pontuados' (temporada {temporada}). Pulando atualização.")
+            return
 
     rows = []
     for atleta_id, atleta in pontuados_data['atletas'].items():
@@ -80,4 +84,5 @@ def update_pontuados(conn, pontuados_data, rodada):
     '''
     execute_values(cursor, insert_sql, rows, page_size=1000)
     conn.commit()
-    print(f"Pontuados: rodada {rodada}, temporada {temporada}, inseridos/atualizados {len(rows)} em {time.time()-t0:.2f}s")
+    action = 'atualizados' if refresh_existing else 'inseridos/atualizados'
+    print(f"Pontuados: rodada {rodada}, temporada {temporada}, {action} {len(rows)} em {time.time()-t0:.2f}s")

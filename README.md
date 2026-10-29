@@ -4,7 +4,8 @@ Serviço responsável por coletar dados da API do Cartola FC periodicamente e ar
 
 ## 🚀 Funcionalidades
 
-- **Fetch Periódico**: Busca dados a cada 30 minutos normalmente e a cada 5 minutos no dia de fechamento do mercado
+- **Fetch Periódico**: Busca dados a cada 30 minutos normalmente e a cada 5 minutos no dia de fechamento e enquanto o mercado estiver fechado
+- **Pontuação ao vivo**: Enquanto o mercado está fechado, atualiza parciais e placares da rodada corrente; ao reabrir, consolida a rodada recém-finalizada
 - **Retry Logic**: Tenta novamente em caso de falha (até 3 tentativas)
 - **Rate Limiting**: Controla taxa de requisições (10 req/s) para evitar bloqueio da API
 - **Verificação de Rodadas**: Preenche automaticamente rodadas faltantes
@@ -43,6 +44,7 @@ POSTGRES_DB=cartola_manager
 # Intervalo de fetch (opcional, padrão: 5 minutos)
 FETCH_INTERVAL_NORMAL_MINUTES=30
 FETCH_INTERVAL_CLOSING_DAY_MINUTES=5
+FETCH_INTERVAL_MARKET_CLOSED_MINUTES=5
 ```
 
 ## 🐳 Docker
