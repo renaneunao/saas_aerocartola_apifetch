@@ -1,7 +1,13 @@
 import unittest
+import os
 from unittest.mock import patch
 
-import database
+with patch.dict(os.environ, {
+    'POSTGRES_HOST': 'localhost',
+    'POSTGRES_USER': 'test',
+    'POSTGRES_PASSWORD': 'test',
+}):
+    import database
 
 with patch.object(database, 'initialize_database', return_value=True):
     from data_fetcher import DataFetcherService
