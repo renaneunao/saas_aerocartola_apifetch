@@ -168,6 +168,7 @@ def sync_json(conn, payload: Dict[str, Any], market: list, temporada: int, rodad
                 alternate.get("apelido_abreviado") or alternate.get("apelido")
                 or alternate.get("nome") or None
             ),
+            "alt_photo": alternate.get("foto"),
             "photo": details.get("foto"),
             "source": "api/lineups-public",
         }

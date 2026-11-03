@@ -90,7 +90,7 @@ class ExternalProbablesParserTests(unittest.TestCase):
         }
         market = [
             {"atleta_id": 143193, "apelido_abreviado": "Viveros", "foto": "viveros.webp"},
-            {"atleta_id": 127871, "apelido_abreviado": "Vargas"},
+            {"atleta_id": 127871, "apelido_abreviado": "Vargas", "foto": "vargas.webp"},
         ]
 
         with patch.object(provaveis_externos, "execute_values", side_effect=capture_values):
@@ -103,6 +103,7 @@ class ExternalProbablesParserTests(unittest.TestCase):
         self.assertEqual(row[10], "duvida")
         self.assertEqual(row[12].adapted["alt_cap"], "Vargas")
         self.assertEqual(row[12].adapted["duvida_com"], 127871)
+        self.assertEqual(row[12].adapted["alt_photo"], "vargas.webp")
 
     def test_duplicate_external_id_uses_market_club_roster(self):
         conn = _Connection()
