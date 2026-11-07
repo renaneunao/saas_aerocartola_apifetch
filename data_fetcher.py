@@ -67,6 +67,11 @@ BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
 NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
 CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
 MARKET_CLOSED_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_MARKET_CLOSED_MINUTES', '5'))
+# Cartola publishes the live points feed while the market is closed, under
+# maintenance, or processing the final round. These states must all use the
+# current-round endpoint; only status 1 is an open market between rounds.
+MARKET_SCORE_SYNC_STATUSES = {2, 4, 6, 15}
+MARKET_FAST_SCORE_SYNC_STATUSES = {2, 4, 15}
 PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_LINEUPS_URL)
 PROVAVEIS_EXTERNAL_MARKET_URL = os.getenv('PROVAVEIS_EXTERNAL_MARKET_URL', DEFAULT_PROVAVEIS_MARKET_URL)
@@ -471,7 +476,8 @@ class DataFetcherService:
 
     def _get_next_interval_minutes(self) -> int:
         """Seleciona intervalo ao vivo, do fechamento ou o intervalo normal."""
-        if isinstance(self.last_market_status, dict) and self.last_market_status.get('status_mercado') == 2:
+        if (isinstance(self.last_market_status, dict)
+                and self.last_market_status.get('status_mercado') in MARKET_FAST_SCORE_SYNC_STATUSES):
             return MARKET_CLOSED_INTERVAL_MINUTES
         if self._is_closing_day(self.last_market_status):
             return CLOSING_DAY_INTERVAL_MINUTES
@@ -786,10 +792,10 @@ class DataFetcherService:
                 status_mercado = status_data.get('status_mercado')
                 logger.info(f"Status do mercado: {status_mercado}")
                 
-                if status_mercado == 2:
+                if status_mercado in MARKET_SCORE_SYNC_STATUSES:
                     logger.info(
-                        "Mercado fechado: sincronizando somente placares e parciais "
-                        "ao vivo da rodada %s.", rodada_atual
+                        "Mercado sem operação (status=%s): sincronizando somente placares e "
+                        "pontuações publicadas da rodada %s.", status_mercado, rodada_atual
                     )
                     results['status'] = True
                     results['partidas'] = self.fetch_and_store_partidas_per_round(rodada_atual)
