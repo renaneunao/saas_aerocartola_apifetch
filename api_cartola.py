@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 from pathlib import Path
 from utils.utilidades import printdbg
 
@@ -136,7 +137,14 @@ def fetch_pontuados_data(rodada, *, live=False):
     """
     url = API_URL_PONTUADOS_ATUAL if live else API_URL_PONTUADOS.format(rodada)
     try:
-        response = requests.get(url, timeout=HTTP_TIMEOUT)
+        if live:
+            # The Cartola CDN may cache the fixed live URL between fetch cycles.
+            # A unique ignored query parameter ensures each scheduled poll gets
+            # the newest published athlete generation.
+            response = requests.get(url, params={"_": str(time.time_ns())},
+                                    timeout=HTTP_TIMEOUT)
+        else:
+            response = requests.get(url, timeout=HTTP_TIMEOUT)
         response.raise_for_status()
         payload = response.json()
         payload_round = payload.get("rodada") if isinstance(payload, dict) else None
