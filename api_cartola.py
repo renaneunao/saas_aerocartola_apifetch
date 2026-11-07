@@ -138,7 +138,12 @@ def fetch_pontuados_data(rodada):
     try:
         response = requests.get(API_URL_PONTUADOS.format(rodada), timeout=HTTP_TIMEOUT)
         if response.ok:
-            return response.json()
+            payload = response.json()
+            athletes = payload.get("atletas") if isinstance(payload, dict) else None
+            if isinstance(athletes, (dict, list)) and athletes:
+                return payload
+            printdbg(f"Pontuados da rodada {rodada} ainda sem atletas publicados")
+            return None
         if response.status_code != 400:
             response.raise_for_status()
 

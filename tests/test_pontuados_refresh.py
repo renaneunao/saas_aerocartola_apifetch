@@ -66,6 +66,13 @@ class PontuadosRefreshTests(unittest.TestCase):
             call(API_URL_PONTUADOS_ATUAL, timeout=(10, 30)),
         ])
 
+    def test_successful_round_endpoint_with_empty_scores_is_not_a_snapshot(self):
+        historical = Mock(ok=True, status_code=200)
+        historical.json.return_value = {'rodada': 34, 'atletas': {}}
+        with patch('api_cartola.requests.get', return_value=historical) as get:
+            self.assertIsNone(fetch_pontuados_data(34))
+        get.assert_called_once_with(API_URL_PONTUADOS.format(34), timeout=(10, 30))
+
     def test_current_endpoint_fallback_is_rejected_for_a_different_round(self):
         historical = Mock(ok=False, status_code=400)
         current = Mock(ok=True, status_code=200)
