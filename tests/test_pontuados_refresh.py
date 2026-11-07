@@ -56,11 +56,12 @@ class PontuadosRefreshTests(unittest.TestCase):
     def test_live_round_uses_only_the_live_endpoint(self):
         current = Mock(ok=True, status_code=200)
         current.json.return_value = {'rodada': 34, 'atletas': {'123': {'pontuacao': 4.2}}}
-        with patch('api_cartola.requests.get', return_value=current) as get:
+        with patch('api_cartola.time.time_ns', return_value=12345), \
+             patch('api_cartola.requests.get', return_value=current) as get:
             payload = fetch_pontuados_data(34, live=True)
 
         self.assertEqual(payload['rodada'], 34)
-        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, params={'_': '12345'}, timeout=(10, 30))
 
     def test_historical_round_uses_only_the_round_endpoint(self):
         historical = Mock(ok=True, status_code=200)
@@ -81,16 +82,18 @@ class PontuadosRefreshTests(unittest.TestCase):
     def test_live_endpoint_is_rejected_for_a_different_round(self):
         current = Mock(ok=True, status_code=200)
         current.json.return_value = {'rodada': 35, 'atletas': {'123': {'pontuacao': 4.2}}}
-        with patch('api_cartola.requests.get', return_value=current) as get:
+        with patch('api_cartola.time.time_ns', return_value=12345), \
+             patch('api_cartola.requests.get', return_value=current) as get:
             self.assertIsNone(fetch_pontuados_data(34, live=True))
-        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, params={'_': '12345'}, timeout=(10, 30))
 
     def test_live_endpoint_without_published_athletes_is_not_a_snapshot(self):
         current = Mock(ok=True, status_code=200)
         current.json.return_value = {'rodada': 34, 'atletas': {}}
-        with patch('api_cartola.requests.get', return_value=current) as get:
+        with patch('api_cartola.time.time_ns', return_value=12345), \
+             patch('api_cartola.requests.get', return_value=current) as get:
             self.assertIsNone(fetch_pontuados_data(34, live=True))
-        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, params={'_': '12345'}, timeout=(10, 30))
 
     def test_historical_error_does_not_call_live_endpoint(self):
         historical = Mock(ok=False, status_code=503)
