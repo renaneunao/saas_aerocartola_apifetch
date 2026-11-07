@@ -12,6 +12,7 @@ from models.credenciais import get_credencial_by_env_key, update_tokens_by_env_k
 API_URL_MERCADO = "https://api.cartola.globo.com/atletas/mercado"
 API_URL_STATUS = "https://api.cartola.globo.com/mercado/status"
 API_URL_PONTUADOS = "https://api.cartola.globo.com/atletas/pontuados/{}"
+API_URL_PONTUADOS_ATUAL = "https://api.cartola.globo.com/atletas/pontuados"
 API_URL_PARTIDAS = "https://api.cartola.globo.com/partidas/{}"
 API_URL_ESQUEMAS = "https://api.cartolafc.globo.com/esquemas"
 API_URL_DESTAQUES = "https://api.cartola.globo.com/auth/mercado/destaques"
@@ -127,13 +128,37 @@ def fetch_status_data():
         return None
 
 def fetch_pontuados_data(rodada):
-    """Obtém dados de atletas pontuados para a rodada especificada (não requer autenticação)."""
+    """Obtém pontuações da rodada, validando o fallback do endpoint atual.
+
+    Cartola pode responder HTTP 400 para ``/atletas/pontuados/{rodada}`` na
+    rodada corrente, embora ``/atletas/pontuados`` já publique os dados ao vivo.
+    O fallback só é aceito quando o payload confirma exatamente a rodada pedida;
+    assim uma consulta histórica nunca grava pontuações da rodada errada.
+    """
     try:
         response = requests.get(API_URL_PONTUADOS.format(rodada), timeout=HTTP_TIMEOUT)
-        response.raise_for_status()
-        return response.json()
+        if response.ok:
+            return response.json()
+        if response.status_code != 400:
+            response.raise_for_status()
+
+        current_response = requests.get(API_URL_PONTUADOS_ATUAL, timeout=HTTP_TIMEOUT)
+        current_response.raise_for_status()
+        payload = current_response.json()
+        payload_round = payload.get("rodada") if isinstance(payload, dict) else None
+        athletes = payload.get("atletas") if isinstance(payload, dict) else None
+        if str(payload_round) == str(rodada) and isinstance(athletes, (dict, list)) and athletes:
+            return payload
+        printdbg(
+            f"Fallback de pontuados ignorado: rodada solicitada {rodada}, "
+            f"rodada retornada {payload_round}, dados de atletas indisponíveis"
+        )
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Erro ao consultar a API Cartola (pontuados, rodada {rodada}): {e}")
+        return None
+    except (ValueError, TypeError) as e:
+        print(f"Resposta inválida da API Cartola (pontuados, rodada {rodada}): {type(e).__name__}")
         return None
 
 def fetch_partidas_data(rodada):
