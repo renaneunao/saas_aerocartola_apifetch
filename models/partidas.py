@@ -17,8 +17,9 @@ def update_partidas(conn, partidas_data, rodada):
         cursor.execute('''
             INSERT INTO acf_partidas (partida_id, rodada_id, clube_casa_id, clube_visitante_id, 
                                             placar_oficial_mandante, placar_oficial_visitante, local, 
-                                            partida_data, valida, timestamp, temporada)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                            partida_data, valida, timestamp, status_transmissao_tr,
+                                            periodo_tr, temporada)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (partida_id) 
             DO UPDATE SET rodada_id = EXCLUDED.rodada_id, 
                          clube_casa_id = EXCLUDED.clube_casa_id, 
@@ -29,10 +30,13 @@ def update_partidas(conn, partidas_data, rodada):
                          partida_data = EXCLUDED.partida_data, 
                          valida = EXCLUDED.valida, 
                          timestamp = EXCLUDED.timestamp,
+                         status_transmissao_tr = EXCLUDED.status_transmissao_tr,
+                         periodo_tr = EXCLUDED.periodo_tr,
                          temporada = EXCLUDED.temporada
         ''', (partida['partida_id'], rodada, partida['clube_casa_id'], partida['clube_visitante_id'],
               partida['placar_oficial_mandante'], partida['placar_oficial_visitante'], partida['local'],
-              partida['partida_data'], partida['valida'], partida['timestamp'], temporada))
+              partida['partida_data'], partida['valida'], partida['timestamp'],
+              partida.get('status_transmissao_tr'), partida.get('periodo_tr'), temporada))
     
     conn.commit()
     print(f"Partidas da rodada {rodada} (temporada {temporada}) atualizadas: {len(partidas_data['partidas'])} partidas")
