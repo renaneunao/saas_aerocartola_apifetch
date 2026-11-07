@@ -44,6 +44,7 @@ from models.status import update_status
 from models.posicoes import update_posicoes
 from models.partidas import update_partidas
 from models.pontuados import update_pontuados
+from models.pontuados_ao_vivo import update_pontuados_ao_vivo
 from models.esquemas import update_esquemas
 from models.destaques import update_destaques
 
@@ -67,6 +68,12 @@ BRASILIA_TZ = pytz.timezone('America/Sao_Paulo')
 NORMAL_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_NORMAL_MINUTES', '30'))
 CLOSING_DAY_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_CLOSING_DAY_MINUTES', '5'))
 MARKET_CLOSED_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_MARKET_CLOSED_MINUTES', '5'))
+# Cartola publishes the live points feed while the market is closed, under
+# maintenance, or processing the final round. These states must all use the
+# current-round endpoint; only status 1 is an open market between rounds.
+MARKET_SCORE_SYNC_STATUSES = {2, 4, 6, 15}
+MARKET_FAST_SCORE_SYNC_STATUSES = {2, 4, 6, 15}
+LIVE_MATCH_STATUSES = {"EM_ANDAMENTO", "INTERVALO"}
 PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_LINEUPS_URL)
 PROVAVEIS_EXTERNAL_MARKET_URL = os.getenv('PROVAVEIS_EXTERNAL_MARKET_URL', DEFAULT_PROVAVEIS_MARKET_URL)
@@ -156,6 +163,8 @@ class DataFetcherService:
         self.last_fetch_time = None
         self.last_fetch_status = None
         self.last_market_status = None
+        self.current_round_number = None
+        self.current_round_live_active = False
         # Inicializar banco de dados (criar tabelas se não existirem)
         logger.info("Inicializando banco de dados...")
         if initialize_database():
@@ -471,7 +480,10 @@ class DataFetcherService:
 
     def _get_next_interval_minutes(self) -> int:
         """Seleciona intervalo ao vivo, do fechamento ou o intervalo normal."""
-        if isinstance(self.last_market_status, dict) and self.last_market_status.get('status_mercado') == 2:
+        if (isinstance(self.last_market_status, dict)
+                and self.last_market_status.get('status_mercado') in MARKET_FAST_SCORE_SYNC_STATUSES):
+            return MARKET_CLOSED_INTERVAL_MINUTES
+        if self.current_round_live_active:
             return MARKET_CLOSED_INTERVAL_MINUTES
         if self._is_closing_day(self.last_market_status):
             return CLOSING_DAY_INTERVAL_MINUTES
@@ -612,6 +624,14 @@ class DataFetcherService:
             if not partidas_data:
                 logger.warning(f"Nenhuma partida encontrada para rodada {rodada}")
                 return False
+
+            if rodada == getattr(self, 'current_round_number', None):
+                fixtures = partidas_data.get('partidas') if isinstance(partidas_data, dict) else None
+                self.current_round_live_active = any(
+                    isinstance(item, dict)
+                    and str(item.get('status_transmissao_tr') or '').upper() in LIVE_MATCH_STATUSES
+                    for item in (fixtures or [])
+                )
             
             conn = get_db_connection()
             if not conn:
@@ -652,7 +672,21 @@ class DataFetcherService:
                 return False
             
             try:
-                update_pontuados(conn, pontuados_data, rodada, refresh_existing=refresh_existing)
+                if live:
+                    from utils.utilidades import get_temporada_atual
+                    count = update_pontuados_ao_vivo(
+                        conn, pontuados_data, rodada, get_temporada_atual()
+                    )
+                    if not count:
+                        logger.warning("Feed ao vivo sem snapshot válido; preservando última geração publicada.")
+                        return False
+                    # Keep the legacy table fresh for existing read-only screens;
+                    # agent live calculations now use the dedicated table above.
+                    update_pontuados(conn, pontuados_data, rodada,
+                                     refresh_existing=refresh_existing)
+                else:
+                    update_pontuados(conn, pontuados_data, rodada,
+                                     refresh_existing=refresh_existing)
                 logger.info(
                     f"Atletas pontuados da rodada {rodada} "
                     f"{'atualizados' if refresh_existing else 'armazenados'} com sucesso"
@@ -760,6 +794,7 @@ class DataFetcherService:
             'status': False,
             'partidas': False,
             'pontuados': False,
+            'pontuados_ao_vivo': True,
             'destaques': False,
             'provaveis_externos': False,
         }
@@ -773,6 +808,8 @@ class DataFetcherService:
                 return
             
             logger.info(f"Rodada atual validada: {rodada_atual}")
+            self.current_round_number = rodada_atual
+            self.current_round_live_active = False
 
             # A fonte externa é independente do mercado oficial. O snapshot
             # é salvo separadamente e nunca sobrescreve o status da Globo.
@@ -786,16 +823,17 @@ class DataFetcherService:
                 status_mercado = status_data.get('status_mercado')
                 logger.info(f"Status do mercado: {status_mercado}")
                 
-                if status_mercado == 2:
+                if status_mercado in MARKET_SCORE_SYNC_STATUSES:
                     logger.info(
-                        "Mercado fechado: sincronizando somente placares e parciais "
-                        "ao vivo da rodada %s.", rodada_atual
+                        "Mercado sem operação (status=%s): sincronizando somente placares e "
+                        "pontuações publicadas da rodada %s.", status_mercado, rodada_atual
                     )
                     results['status'] = True
                     results['partidas'] = self.fetch_and_store_partidas_per_round(rodada_atual)
                     results['pontuados'] = self.fetch_and_store_pontuados(
                         rodada_atual, refresh_existing=True, live=True
                     )
+                    results['pontuados_ao_vivo'] = results['pontuados']
                     self.last_fetch_time = datetime.now(BRASILIA_TZ)
                     self.last_fetch_status = 'success' if results['partidas'] and results['pontuados'] else 'partial'
                     logger.info(
@@ -838,6 +876,20 @@ class DataFetcherService:
                 # Sempre atualizar rodada atual (placares podem mudar)
                 logger.info(f"Atualizando partidas da rodada atual ({rodada_atual})...")
                 self.fetch_and_store_partidas_per_round(rodada_atual)
+
+                # O status do mercado pode voltar a aberto enquanto ainda há
+                # partidas em andamento (jogos adiados). Nessa janela, mantém
+                # o feed global de atletas atualizado, sem consultar elencos
+                # time a time; as pontuações locais leem esta única geração.
+                if self.current_round_live_active:
+                    logger.info(
+                        "Há partidas da rodada %s em andamento com status de mercado %s; "
+                        "atualizando o feed global de pontuados ao vivo.",
+                        rodada_atual, status_data.get('status_mercado') if status_data else 'indisponível'
+                    )
+                    results['pontuados_ao_vivo'] = self.fetch_and_store_pontuados(
+                        rodada_atual, refresh_existing=True, live=True
+                    )
                 
                 # Verificar rodadas anteriores que têm partidas sem placar
                 if rodada_atual > 1:

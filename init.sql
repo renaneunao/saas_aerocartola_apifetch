@@ -80,10 +80,15 @@ CREATE TABLE IF NOT EXISTS acf_partidas (
     partida_data TEXT,
     valida BOOLEAN,
     timestamp INTEGER,
+    status_transmissao_tr TEXT,
+    periodo_tr TEXT,
     temporada INTEGER,  -- Temporada do campeonato (ex: 2025)
     FOREIGN KEY (clube_casa_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (clube_visitante_id) REFERENCES acf_clubes(id)
 );
+
+ALTER TABLE acf_partidas ADD COLUMN IF NOT EXISTS status_transmissao_tr TEXT;
+ALTER TABLE acf_partidas ADD COLUMN IF NOT EXISTS periodo_tr TEXT;
 
 CREATE TABLE IF NOT EXISTS acf_pontuados (
     atleta_id INTEGER,
@@ -118,6 +123,27 @@ CREATE TABLE IF NOT EXISTS acf_pontuados (
     FOREIGN KEY (clube_id) REFERENCES acf_clubes(id),
     FOREIGN KEY (posicao_id) REFERENCES acf_posicoes(id)
 );
+
+-- Último snapshot publicado pelo feed global ao vivo do Cartola.
+-- Mantido separado do histórico fechado para que as leituras ao vivo não
+-- dependam de baixar o /time/id de cada participante.
+CREATE TABLE IF NOT EXISTS acf_pontuados_ao_vivo (
+    temporada INTEGER NOT NULL,
+    rodada_id INTEGER NOT NULL,
+    atleta_id INTEGER NOT NULL,
+    clube_id INTEGER,
+    posicao_id INTEGER,
+    pontuacao REAL,
+    entrou_em_campo BOOLEAN,
+    apelido TEXT,
+    foto TEXT,
+    scout JSONB NOT NULL DEFAULT '{}'::jsonb,
+    snapshot_em TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (temporada, rodada_id, atleta_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_acf_pontuados_ao_vivo_round_snapshot
+    ON acf_pontuados_ao_vivo (temporada, rodada_id, snapshot_em DESC);
 
 -- Migração idempotente para bancos criados antes dos scouts adicionais.
 ALTER TABLE acf_pontuados ADD COLUMN IF NOT EXISTS scout_dp INTEGER DEFAULT 0;

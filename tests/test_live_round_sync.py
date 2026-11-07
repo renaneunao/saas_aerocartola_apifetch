@@ -40,6 +40,23 @@ class LiveRoundSyncTests(unittest.TestCase):
         catalog.assert_not_called()
         self.assertEqual(service.last_fetch_status, 'success')
 
+    def test_maintenance_status_also_fetches_published_current_round_points(self):
+        service = self._service()
+        with patch.object(service, 'get_current_round', return_value=34), \
+             patch('data_fetcher.fetch_status_data', return_value={
+                 'rodada_atual': 34, 'status_mercado': 4,
+             }), \
+             patch.object(service, 'fetch_and_store_external_probables', return_value=True), \
+             patch.object(service, 'fetch_and_store_partidas_per_round', return_value=True) as matches, \
+             patch.object(service, 'fetch_and_store_pontuados', return_value=True) as scores, \
+             patch.object(service, 'fetch_and_store_cartola_data') as catalog:
+            service.run_fetch_cycle()
+
+        matches.assert_called_once_with(34)
+        scores.assert_called_once_with(34, refresh_existing=True, live=True)
+        catalog.assert_not_called()
+        self.assertEqual(service.last_fetch_status, 'success')
+
     def test_reopened_market_reconciles_previous_round_even_when_present(self):
         service = self._service()
         with patch.object(service, 'get_current_round', return_value=29), \
@@ -61,7 +78,49 @@ class LiveRoundSyncTests(unittest.TestCase):
 
     def test_market_closed_uses_live_poll_interval(self):
         service = self._service()
-        service.last_market_status = {'status_mercado': 2}
+        with patch('data_fetcher.MARKET_CLOSED_INTERVAL_MINUTES', 5):
+            for status in (2, 4, 15):
+                with self.subTest(status=status):
+                    service.last_market_status = {'status_mercado': status}
+                    self.assertEqual(service._get_next_interval_minutes(), 5)
+
+    def test_end_of_season_score_sync_uses_live_poll_interval(self):
+        service = self._service()
+        service.last_market_status = {'status_mercado': 6}
+        with patch('data_fetcher.MARKET_CLOSED_INTERVAL_MINUTES', 5):
+            self.assertEqual(service._get_next_interval_minutes(), 5)
+
+    def test_open_market_with_live_fixture_refreshes_global_live_feed(self):
+        service = self._service()
+
+        def fetch_current_matches(round_number):
+            service.current_round_live_active = True
+            return True
+
+        with patch.object(service, 'get_current_round', return_value=29), \
+             patch('data_fetcher.fetch_status_data', return_value={
+                 'rodada_atual': 29, 'status_mercado': 1,
+             }), \
+             patch.object(service, 'fetch_and_store_external_probables', return_value=True), \
+             patch.object(service, 'fetch_and_store_cartola_data', return_value=True), \
+             patch.object(service, 'fetch_and_store_esquemas', return_value=True), \
+             patch.object(service, 'fetch_and_store_partidas_per_round', side_effect=fetch_current_matches), \
+             patch.object(service, 'get_rounds_without_scores', return_value=[]), \
+             patch.object(service, 'get_missing_rounds', return_value=[]), \
+             patch.object(service, 'fetch_and_store_destaques', return_value=True), \
+             patch.object(service, 'fetch_and_store_pontuados', return_value=True) as scores:
+            service.run_fetch_cycle()
+
+        self.assertEqual(scores.call_args_list[0].args, (28,))
+        self.assertEqual(scores.call_args_list[1].args, (29,))
+        self.assertEqual(scores.call_args_list[1].kwargs,
+                         {'refresh_existing': True, 'live': True})
+        self.assertEqual(service._get_next_interval_minutes(), 5)
+
+    def test_live_match_poll_interval_is_fast_even_when_market_open(self):
+        service = self._service()
+        service.last_market_status = {'status_mercado': 1}
+        service.current_round_live_active = True
         with patch('data_fetcher.MARKET_CLOSED_INTERVAL_MINUTES', 5):
             self.assertEqual(service._get_next_interval_minutes(), 5)
 
