@@ -631,7 +631,8 @@ class DataFetcherService:
     
     @retry_on_failure(max_retries=3, delay=2.0)
     @rate_limiter
-    def fetch_and_store_pontuados(self, rodada: int, refresh_existing: bool = False) -> bool:
+    def fetch_and_store_pontuados(self, rodada: int, refresh_existing: bool = False,
+                                  live: bool = False) -> bool:
         """
         Busca e armazena atletas pontuados de uma rodada
         Rodadas históricas só são inseridas uma vez; a rodada ao vivo/recém-finalizada
@@ -639,7 +640,7 @@ class DataFetcherService:
         """
         try:
             logger.info(f"Buscando atletas pontuados da rodada {rodada}...")
-            pontuados_data = fetch_pontuados_data(rodada)
+            pontuados_data = fetch_pontuados_data(rodada, live=live)
             
             if not pontuados_data:
                 logger.warning(f"Nenhum atleta pontuado encontrado para rodada {rodada}")
@@ -793,7 +794,7 @@ class DataFetcherService:
                     results['status'] = True
                     results['partidas'] = self.fetch_and_store_partidas_per_round(rodada_atual)
                     results['pontuados'] = self.fetch_and_store_pontuados(
-                        rodada_atual, refresh_existing=True
+                        rodada_atual, refresh_existing=True, live=True
                     )
                     self.last_fetch_time = datetime.now(BRASILIA_TZ)
                     self.last_fetch_status = 'success' if results['partidas'] and results['pontuados'] else 'partial'
