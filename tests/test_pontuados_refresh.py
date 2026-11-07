@@ -53,18 +53,23 @@ class PontuadosRefreshTests(unittest.TestCase):
         self.assertEqual(conn.commits, 2)
         self.assertIn('ON CONFLICT (atleta_id, rodada_id)', execute_values.call_args.args[1])
 
-    def test_current_endpoint_is_used_only_when_historical_endpoint_returns_400(self):
-        historical = Mock(ok=False, status_code=400)
+    def test_live_round_uses_only_the_live_endpoint(self):
         current = Mock(ok=True, status_code=200)
         current.json.return_value = {'rodada': 34, 'atletas': {'123': {'pontuacao': 4.2}}}
-        with patch('api_cartola.requests.get', side_effect=[historical, current]) as get:
-            payload = fetch_pontuados_data(34)
+        with patch('api_cartola.requests.get', return_value=current) as get:
+            payload = fetch_pontuados_data(34, live=True)
 
         self.assertEqual(payload['rodada'], 34)
-        self.assertEqual(get.call_args_list, [
-            call(API_URL_PONTUADOS.format(34), timeout=(10, 30)),
-            call(API_URL_PONTUADOS_ATUAL, timeout=(10, 30)),
-        ])
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
+
+    def test_historical_round_uses_only_the_round_endpoint(self):
+        historical = Mock(ok=True, status_code=200)
+        historical.json.return_value = {'rodada': 27, 'atletas': {'123': {'pontuacao': 4.2}}}
+        with patch('api_cartola.requests.get', return_value=historical) as get:
+            payload = fetch_pontuados_data(27)
+
+        self.assertEqual(payload['rodada'], 27)
+        get.assert_called_once_with(API_URL_PONTUADOS.format(27), timeout=(10, 30))
 
     def test_successful_round_endpoint_with_empty_scores_is_not_a_snapshot(self):
         historical = Mock(ok=True, status_code=200)
@@ -73,21 +78,21 @@ class PontuadosRefreshTests(unittest.TestCase):
             self.assertIsNone(fetch_pontuados_data(34))
         get.assert_called_once_with(API_URL_PONTUADOS.format(34), timeout=(10, 30))
 
-    def test_current_endpoint_fallback_is_rejected_for_a_different_round(self):
-        historical = Mock(ok=False, status_code=400)
+    def test_live_endpoint_is_rejected_for_a_different_round(self):
         current = Mock(ok=True, status_code=200)
-        current.json.return_value = {'rodada': 35, 'atletas': {}}
-        with patch('api_cartola.requests.get', side_effect=[historical, current]):
-            self.assertIsNone(fetch_pontuados_data(34))
+        current.json.return_value = {'rodada': 35, 'atletas': {'123': {'pontuacao': 4.2}}}
+        with patch('api_cartola.requests.get', return_value=current) as get:
+            self.assertIsNone(fetch_pontuados_data(34, live=True))
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
 
-    def test_current_endpoint_fallback_is_rejected_until_at_least_one_athlete_is_published(self):
-        historical = Mock(ok=False, status_code=400)
+    def test_live_endpoint_without_published_athletes_is_not_a_snapshot(self):
         current = Mock(ok=True, status_code=200)
         current.json.return_value = {'rodada': 34, 'atletas': {}}
-        with patch('api_cartola.requests.get', side_effect=[historical, current]):
-            self.assertIsNone(fetch_pontuados_data(34))
+        with patch('api_cartola.requests.get', return_value=current) as get:
+            self.assertIsNone(fetch_pontuados_data(34, live=True))
+        get.assert_called_once_with(API_URL_PONTUADOS_ATUAL, timeout=(10, 30))
 
-    def test_non_400_historical_error_does_not_fallback_to_current_round(self):
+    def test_historical_error_does_not_call_live_endpoint(self):
         historical = Mock(ok=False, status_code=503)
         historical.raise_for_status.side_effect = HTTPError('upstream unavailable')
         with patch('api_cartola.requests.get', return_value=historical) as get:

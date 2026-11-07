@@ -127,43 +127,35 @@ def fetch_status_data():
         print(f"Erro ao consultar a API Cartola (status): {e}")
         return None
 
-def fetch_pontuados_data(rodada):
-    """Obtém pontuações da rodada, validando o fallback do endpoint atual.
+def fetch_pontuados_data(rodada, *, live=False):
+    """Fetch published scores from the endpoint selected for the data state.
 
-    Cartola pode responder HTTP 400 para ``/atletas/pontuados/{rodada}`` na
-    rodada corrente, embora ``/atletas/pontuados`` já publique os dados ao vivo.
-    O fallback só é aceito quando o payload confirma exatamente a rodada pedida;
-    assim uma consulta histórica nunca grava pontuações da rodada errada.
+    Current-round partials use Cartola's live endpoint; archived/final rounds
+    use the round-specific endpoint. There is deliberately no endpoint
+    fallback: unavailable, mismatched, or empty data is not a score snapshot.
     """
+    url = API_URL_PONTUADOS_ATUAL if live else API_URL_PONTUADOS.format(rodada)
     try:
-        response = requests.get(API_URL_PONTUADOS.format(rodada), timeout=HTTP_TIMEOUT)
-        if response.ok:
-            payload = response.json()
-            athletes = payload.get("atletas") if isinstance(payload, dict) else None
-            if isinstance(athletes, (dict, list)) and athletes:
-                return payload
-            printdbg(f"Pontuados da rodada {rodada} ainda sem atletas publicados")
-            return None
-        if response.status_code != 400:
-            response.raise_for_status()
-
-        current_response = requests.get(API_URL_PONTUADOS_ATUAL, timeout=HTTP_TIMEOUT)
-        current_response.raise_for_status()
-        payload = current_response.json()
+        response = requests.get(url, timeout=HTTP_TIMEOUT)
+        response.raise_for_status()
+        payload = response.json()
         payload_round = payload.get("rodada") if isinstance(payload, dict) else None
         athletes = payload.get("atletas") if isinstance(payload, dict) else None
-        if str(payload_round) == str(rodada) and isinstance(athletes, (dict, list)) and athletes:
-            return payload
-        printdbg(
-            f"Fallback de pontuados ignorado: rodada solicitada {rodada}, "
-            f"rodada retornada {payload_round}, dados de atletas indisponíveis"
-        )
-        return None
+        if live and str(payload_round) != str(rodada):
+            printdbg(f"Parciais ao vivo da rodada {rodada} indisponíveis: Cartola retornou rodada {payload_round}")
+            return None
+        if payload_round is not None and str(payload_round) != str(rodada):
+            printdbg(f"Pontuados rejeitados: rodada solicitada {rodada}, Cartola retornou rodada {payload_round}")
+            return None
+        if not isinstance(athletes, (dict, list)) or not athletes:
+            printdbg(f"Pontuados da rodada {rodada} ainda não publicados; snapshot não será criado")
+            return None
+        return payload
     except requests.exceptions.RequestException as e:
-        print(f"Erro ao consultar a API Cartola (pontuados, rodada {rodada}): {e}")
+        print(f"Erro ao consultar a API Cartola (pontuados, rodada {rodada}, live={live}): {e}")
         return None
     except (ValueError, TypeError) as e:
-        print(f"Resposta inválida da API Cartola (pontuados, rodada {rodada}): {type(e).__name__}")
+        print(f"Resposta inválida da API Cartola (pontuados, rodada {rodada}, live={live}): {type(e).__name__}")
         return None
 
 def fetch_partidas_data(rodada):

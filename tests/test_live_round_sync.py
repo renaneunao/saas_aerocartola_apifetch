@@ -36,7 +36,7 @@ class LiveRoundSyncTests(unittest.TestCase):
             service.run_fetch_cycle()
 
         matches.assert_called_once_with(28)
-        scores.assert_called_once_with(28, refresh_existing=True)
+        scores.assert_called_once_with(28, refresh_existing=True, live=True)
         catalog.assert_not_called()
         self.assertEqual(service.last_fetch_status, 'success')
 
