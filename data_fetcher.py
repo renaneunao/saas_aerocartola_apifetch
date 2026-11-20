@@ -71,8 +71,15 @@ MARKET_CLOSED_INTERVAL_MINUTES = int(os.getenv('FETCH_INTERVAL_MARKET_CLOSED_MIN
 # Cartola publishes the live points feed while the market is closed, under
 # maintenance, or processing the final round. These states must all use the
 # current-round endpoint; only status 1 is an open market between rounds.
-MARKET_SCORE_SYNC_STATUSES = {2, 4, 6, 15}
-MARKET_FAST_SCORE_SYNC_STATUSES = {2, 4, 6, 15}
+# Qualquer status diferente de 1 (mercado aberto) mantem o feed de pontos vivo:
+# o Cartola segue ajustando pontuacoes em manutencao/atualizacao (ex.: status 3).
+class _NonOpenStatuses:
+    def __contains__(self, status):
+        return status is not None and status != 1
+
+
+MARKET_SCORE_SYNC_STATUSES = _NonOpenStatuses()
+MARKET_FAST_SCORE_SYNC_STATUSES = _NonOpenStatuses()
 LIVE_MATCH_STATUSES = {"EM_ANDAMENTO", "INTERVALO"}
 PROVAVEIS_EXTERNAL_ENABLED = os.getenv('PROVAVEIS_EXTERNAL_ENABLED', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 PROVAVEIS_EXTERNAL_URL = os.getenv('PROVAVEIS_EXTERNAL_URL', DEFAULT_PROVAVEIS_LINEUPS_URL)
